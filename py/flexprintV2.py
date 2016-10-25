@@ -498,6 +498,24 @@ class FlexSwitchShow( object):
         self.tblPrintObject('Fan', header, rows)
 
 
+    def printDHCPRelayIntfs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('Enable')
+            header.append('ServerIp')
+
+        objs = self.swtch.getAllDHCPRelayIntfs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['ServerIp'])
+            rows.append(values)
+        self.tblPrintObject('DHCPRelayIntf', header, rows)
+
+
     def printSubIPv6Intfs(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -961,7 +979,6 @@ class FlexSwitchShow( object):
             header.append('AuthType')
             header.append('ImportAsExtern')
             header.append('AreaSummary')
-            header.append('AreaNssaTranslatorRole')
             header.append('StubDefaultCost')
 
         objs = self.swtch.getAllOspfAreaEntrys()
@@ -972,7 +989,6 @@ class FlexSwitchShow( object):
             values.append('%s' % o['AuthType'])
             values.append('%s' % o['ImportAsExtern'])
             values.append('%s' % o['AreaSummary'])
-            values.append('%s' % o['AreaNssaTranslatorRole'])
             values.append('%s' % o['StubDefaultCost'])
             rows.append(values)
         self.tblPrintObject('OspfAreaEntry', header, rows)
@@ -1133,42 +1149,111 @@ class FlexSwitchShow( object):
         self.tblPrintObject('LaPortChannelState', header, rows)
 
 
-    def printDhcpGlobalConfigs(self, addHeader=True, brief=None):
+    def printIPv6IntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DhcpConfigKey')
-            header.append('Enable')
-            header.append('DefaultLeaseTime')
-            header.append('MaxLeaseTime')
-
-        objs = self.swtch.getAllDhcpGlobalConfigs()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['DhcpConfigKey'])
-            values.append('%s' % o['Enable'])
-            values.append('%s' % o['DefaultLeaseTime'])
-            values.append('%s' % o['MaxLeaseTime'])
-            rows.append(values)
-        self.tblPrintObject('DhcpGlobalConfig', header, rows)
-
-
-    def printDhcpRelayIntfs(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
+            header.append('IntfRef')
             header.append('IfIndex')
-            header.append('Enable')
-            header.append('ServerIp')
+            header.append('IpAddr')
+            header.append('OperState')
+            header.append('NumUpEvents')
+            header.append('LastUpEventTime')
+            header.append('NumDownEvents')
+            header.append('LastDownEventTime')
+            header.append('L2IntfType')
+            header.append('L2IntfId')
 
-        objs = self.swtch.getAllDhcpRelayIntfs()
+        objs = self.swtch.getAllIPv6IntfStates()
         for obj in objs:
             o = obj['Object']
             values = []
+            values.append('%s' % o['IntfRef'])
             values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['Enable'])
-            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['OperState'])
+            values.append('%s' % o['NumUpEvents'])
+            values.append('%s' % o['LastUpEventTime'])
+            values.append('%s' % o['NumDownEvents'])
+            values.append('%s' % o['LastDownEventTime'])
+            values.append('%s' % o['L2IntfType'])
+            values.append('%s' % o['L2IntfId'])
             rows.append(values)
-        self.tblPrintObject('DhcpRelayIntf', header, rows)
+        self.tblPrintObject('IPv6IntfState', header, rows)
+
+
+    def printIPv6IntfState(self, IntfRef, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IfIndex')
+            header.append('IpAddr')
+            header.append('OperState')
+            header.append('NumUpEvents')
+            header.append('LastUpEventTime')
+            header.append('NumDownEvents')
+            header.append('LastDownEventTime')
+            header.append('L2IntfType')
+            header.append('L2IntfId')
+
+        rawobj = self.swtch.getIPv6IntfState(
+                                             IntfRef)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['OperState'])
+            values.append('%s' % o['NumUpEvents'])
+            values.append('%s' % o['LastUpEventTime'])
+            values.append('%s' % o['NumDownEvents'])
+            values.append('%s' % o['LastDownEventTime'])
+            values.append('%s' % o['L2IntfType'])
+            values.append('%s' % o['L2IntfId'])
+            rows.append(values)
+            self.tblPrintObject('IPv6IntfState', header, rows)
+
+        else:
+            print rawobj.content
+
+    def printCombinedIPv6IntfStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IfIndex')
+            header.append('IpAddr')
+            header.append('OperState')
+            header.append('NumUpEvents')
+            header.append('LastUpEventTime')
+            header.append('NumDownEvents')
+            header.append('LastDownEventTime')
+            header.append('L2IntfType')
+            header.append('L2IntfId')
+            header.append('AdminState')
+            header.append('LinkIp')
+
+        objs = self.swtch.getAllIPv6IntfStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['OperState'])
+            values.append('%s' % o['NumUpEvents'])
+            values.append('%s' % o['LastUpEventTime'])
+            values.append('%s' % o['NumDownEvents'])
+            values.append('%s' % o['LastDownEventTime'])
+            values.append('%s' % o['L2IntfType'])
+            values.append('%s' % o['L2IntfId'])
+            r = self.swtch.getIPv6Intf(o['IntfRef'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['AdminState'])
+                values.append('%s' % o['LinkIp'])
+            rows.append(values)
+        self.tblPrintObject('IPv6IntfState', header, rows)
 
 
     def printDistributedRelayStates(self, addHeader=True, brief=None):
@@ -1990,6 +2075,24 @@ class FlexSwitchShow( object):
         self.tblPrintObject('NotifierEnable', header, rows)
 
 
+    def printDHCPRelayGlobals(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('HopCountLimit')
+            header.append('Enable')
+
+        objs = self.swtch.getAllDHCPRelayGlobals()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['HopCountLimit'])
+            values.append('%s' % o['Enable'])
+            rows.append(values)
+        self.tblPrintObject('DHCPRelayGlobal', header, rows)
+
+
     def printLaPortChannels(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -2125,76 +2228,49 @@ class FlexSwitchShow( object):
         else:
             print rawobj.content
 
-    def printFanSensorStates(self, addHeader=True, brief=None):
+    def printIPv4RouteHwStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('CurrentSpeed')
+            header.append('DestinationNw')
+            header.append('NextHopIps')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
 
-        objs = self.swtch.getAllFanSensorStates()
+        objs = self.swtch.getAllIPv4RouteHwStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['CurrentSpeed'])
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['NextHopIps'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
             rows.append(values)
-        self.tblPrintObject('FanSensorState', header, rows)
+        self.tblPrintObject('IPv4RouteHwState', header, rows)
 
 
-    def printFanSensorState(self, Name, addHeader=True, brief=None):
+    def printIPv4RouteHwState(self, DestinationNw, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('CurrentSpeed')
+            header.append('DestinationNw')
+            header.append('NextHopIps')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
 
-        rawobj = self.swtch.getFanSensorState(
-                                              Name)
+        rawobj = self.swtch.getIPv4RouteHwState(
+                                                DestinationNw)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['CurrentSpeed'])
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['NextHopIps'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
             rows.append(values)
-            self.tblPrintObject('FanSensorState', header, rows)
+            self.tblPrintObject('IPv4RouteHwState', header, rows)
 
         else:
             print rawobj.content
-
-    def printCombinedFanSensorStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('Name')
-            header.append('CurrentSpeed')
-            header.append('HigherAlarmThreshold')
-            header.append('HigherWarningThreshold')
-            header.append('LowerWarningThreshold')
-            header.append('LowerAlarmThreshold')
-            header.append('PMClassCAdminState')
-            header.append('PMClassAAdminState')
-            header.append('AdminState')
-            header.append('PMClassBAdminState')
-
-        objs = self.swtch.getAllFanSensorStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['CurrentSpeed'])
-            r = self.swtch.getFanSensor(o['Name'])
-            if r.status_code in self.httpSuccessCodes:
-                o = r.json()['Object']
-                values.append('%s' % o['HigherAlarmThreshold'])
-                values.append('%s' % o['HigherWarningThreshold'])
-                values.append('%s' % o['LowerWarningThreshold'])
-                values.append('%s' % o['LowerAlarmThreshold'])
-                values.append('%s' % o['PMClassCAdminState'])
-                values.append('%s' % o['PMClassAAdminState'])
-                values.append('%s' % o['AdminState'])
-                values.append('%s' % o['PMClassBAdminState'])
-            rows.append(values)
-        self.tblPrintObject('FanSensorState', header, rows)
-
 
     def printBfdSessionParams(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -2290,72 +2366,50 @@ class FlexSwitchShow( object):
         else:
             print rawobj.content
 
-    def printBGPPolicyStmtStates(self, addHeader=True, brief=None):
+    def printDHCPRelayIntfServerStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('MatchConditions')
-            header.append('Conditions')
-            header.append('Actions')
+            header.append('IntfRef')
+            header.append('ServerIp')
+            header.append('Request')
+            header.append('Responses')
 
-        objs = self.swtch.getAllBGPPolicyStmtStates()
+        objs = self.swtch.getAllDHCPRelayIntfServerStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['MatchConditions'])
-            values.append('%s' % o['Conditions'])
-            values.append('%s' % o['Actions'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['Request'])
+            values.append('%s' % o['Responses'])
             rows.append(values)
-        self.tblPrintObject('BGPPolicyStmtState', header, rows)
+        self.tblPrintObject('DHCPRelayIntfServerState', header, rows)
 
 
-    def printBGPPolicyStmtState(self, Name, addHeader=True, brief=None):
+    def printDHCPRelayIntfServerState(self, IntfRef,ServerIp, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Name')
-            header.append('MatchConditions')
-            header.append('Conditions')
-            header.append('Actions')
+            header.append('IntfRef')
+            header.append('ServerIp')
+            header.append('Request')
+            header.append('Responses')
 
-        rawobj = self.swtch.getBGPPolicyStmtState(
-                                                  Name)
+        rawobj = self.swtch.getDHCPRelayIntfServerState(
+                                                        IntfRef,
+                                                        ServerIp)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['MatchConditions'])
-            values.append('%s' % o['Conditions'])
-            values.append('%s' % o['Actions'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['Request'])
+            values.append('%s' % o['Responses'])
             rows.append(values)
-            self.tblPrintObject('BGPPolicyStmtState', header, rows)
+            self.tblPrintObject('DHCPRelayIntfServerState', header, rows)
 
         else:
             print rawobj.content
-
-    def printCombinedBGPPolicyStmtStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('Name')
-            header.append('MatchConditions')
-            header.append('Conditions')
-            header.append('Actions')
-
-        objs = self.swtch.getAllBGPPolicyStmtStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['MatchConditions'])
-            values.append('%s' % o['Conditions'])
-            values.append('%s' % o['Actions'])
-            r = self.swtch.getBGPPolicyStmt(o['Name'])
-            if r.status_code in self.httpSuccessCodes:
-                o = r.json()['Object']
-            rows.append(values)
-        self.tblPrintObject('BGPPolicyStmtState', header, rows)
-
 
     def printDWDMModuleStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -2492,88 +2546,53 @@ class FlexSwitchShow( object):
         self.tblPrintObject('DWDMModuleState', header, rows)
 
 
-    def printDhcpRelayIntfStates(self, addHeader=True, brief=None):
+    def printNDPEntryStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('Vlan')
+            header.append('Intf')
             header.append('IfIndex')
-            header.append('TotalDrops')
-            header.append('TotalDhcpClientRx')
-            header.append('TotalDhcpClientTx')
-            header.append('TotalDhcpServerRx')
-            header.append('TotalDhcpServerTx')
 
-        objs = self.swtch.getAllDhcpRelayIntfStates()
+        objs = self.swtch.getAllNDPEntryStates()
         for obj in objs:
             o = obj['Object']
             values = []
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['Vlan'])
+            values.append('%s' % o['Intf'])
             values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['TotalDrops'])
-            values.append('%s' % o['TotalDhcpClientRx'])
-            values.append('%s' % o['TotalDhcpClientTx'])
-            values.append('%s' % o['TotalDhcpServerRx'])
-            values.append('%s' % o['TotalDhcpServerTx'])
             rows.append(values)
-        self.tblPrintObject('DhcpRelayIntfState', header, rows)
+        self.tblPrintObject('NDPEntryState', header, rows)
 
 
-    def printDhcpRelayIntfState(self, IfIndex, addHeader=True, brief=None):
+    def printNDPEntryState(self, IpAddr, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('Vlan')
+            header.append('Intf')
             header.append('IfIndex')
-            header.append('TotalDrops')
-            header.append('TotalDhcpClientRx')
-            header.append('TotalDhcpClientTx')
-            header.append('TotalDhcpServerRx')
-            header.append('TotalDhcpServerTx')
 
-        rawobj = self.swtch.getDhcpRelayIntfState(
-                                                  IfIndex)
+        rawobj = self.swtch.getNDPEntryState(
+                                             IpAddr)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['Vlan'])
+            values.append('%s' % o['Intf'])
             values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['TotalDrops'])
-            values.append('%s' % o['TotalDhcpClientRx'])
-            values.append('%s' % o['TotalDhcpClientTx'])
-            values.append('%s' % o['TotalDhcpServerRx'])
-            values.append('%s' % o['TotalDhcpServerTx'])
             rows.append(values)
-            self.tblPrintObject('DhcpRelayIntfState', header, rows)
+            self.tblPrintObject('NDPEntryState', header, rows)
 
         else:
             print rawobj.content
-
-    def printCombinedDhcpRelayIntfStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IfIndex')
-            header.append('TotalDrops')
-            header.append('TotalDhcpClientRx')
-            header.append('TotalDhcpClientTx')
-            header.append('TotalDhcpServerRx')
-            header.append('TotalDhcpServerTx')
-            header.append('Enable')
-            header.append('ServerIp')
-
-        objs = self.swtch.getAllDhcpRelayIntfStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['TotalDrops'])
-            values.append('%s' % o['TotalDhcpClientRx'])
-            values.append('%s' % o['TotalDhcpClientTx'])
-            values.append('%s' % o['TotalDhcpServerRx'])
-            values.append('%s' % o['TotalDhcpServerTx'])
-            r = self.swtch.getDhcpRelayIntf(o['IfIndex'])
-            if r.status_code in self.httpSuccessCodes:
-                o = r.json()['Object']
-                values.append('%s' % o['Enable'])
-                values.append('%s' % o['ServerIp'])
-            rows.append(values)
-        self.tblPrintObject('DhcpRelayIntfState', header, rows)
-
 
     def printLaPortChannelIntfRefListStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -2783,20 +2802,42 @@ class FlexSwitchShow( object):
         else:
             print rawobj.content
 
-    def printDhcpRelayGlobals(self, addHeader=True, brief=None):
+    def printQsfps(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Vrf')
-            header.append('Enable')
+            header.append('QsfpId')
+            header.append('HigherAlarmTemperature')
+            header.append('HigherAlarmVoltage')
+            header.append('HigherWarningTemperature')
+            header.append('HigherWarningVoltage')
+            header.append('LowerAlarmTemperature')
+            header.append('LowerAlarmVoltage')
+            header.append('LowerWarningTemperature')
+            header.append('LowerWarningVoltage')
+            header.append('PMClassBAdminState')
+            header.append('PMClassCAdminState')
+            header.append('PMClassAAdminState')
+            header.append('AdminState')
 
-        objs = self.swtch.getAllDhcpRelayGlobals()
+        objs = self.swtch.getAllQsfps()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Vrf'])
-            values.append('%s' % o['Enable'])
+            values.append('%s' % o['QsfpId'])
+            values.append('%s' % o['HigherAlarmTemperature'])
+            values.append('%s' % o['HigherAlarmVoltage'])
+            values.append('%s' % o['HigherWarningTemperature'])
+            values.append('%s' % o['HigherWarningVoltage'])
+            values.append('%s' % o['LowerAlarmTemperature'])
+            values.append('%s' % o['LowerAlarmVoltage'])
+            values.append('%s' % o['LowerWarningTemperature'])
+            values.append('%s' % o['LowerWarningVoltage'])
+            values.append('%s' % o['PMClassBAdminState'])
+            values.append('%s' % o['PMClassCAdminState'])
+            values.append('%s' % o['PMClassAAdminState'])
+            values.append('%s' % o['AdminState'])
             rows.append(values)
-        self.tblPrintObject('DhcpRelayGlobal', header, rows)
+        self.tblPrintObject('Qsfp', header, rows)
 
 
     def printPlatformStates(self, addHeader=True, brief=None):
@@ -3229,134 +3270,6 @@ class FlexSwitchShow( object):
         self.tblPrintObject('OspfGlobal', header, rows)
 
 
-    def printDhcpRelayHostDhcpStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('MacAddr')
-            header.append('ServerIp')
-            header.append('OfferedIp')
-            header.append('GatewayIp')
-            header.append('AcceptedIp')
-            header.append('RequestedIp')
-            header.append('ClientDiscover')
-            header.append('ClientRequest')
-            header.append('ClientRequests')
-            header.append('ClientResponses')
-            header.append('ServerOffer')
-            header.append('ServerAck')
-            header.append('ServerRequests')
-            header.append('ServerResponses')
-
-        objs = self.swtch.getAllDhcpRelayHostDhcpStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['ServerIp'])
-            values.append('%s' % o['OfferedIp'])
-            values.append('%s' % o['GatewayIp'])
-            values.append('%s' % o['AcceptedIp'])
-            values.append('%s' % o['RequestedIp'])
-            values.append('%s' % o['ClientDiscover'])
-            values.append('%s' % o['ClientRequest'])
-            values.append('%s' % o['ClientRequests'])
-            values.append('%s' % o['ClientResponses'])
-            values.append('%s' % o['ServerOffer'])
-            values.append('%s' % o['ServerAck'])
-            values.append('%s' % o['ServerRequests'])
-            values.append('%s' % o['ServerResponses'])
-            rows.append(values)
-        self.tblPrintObject('DhcpRelayHostDhcpState', header, rows)
-
-
-    def printDhcpRelayHostDhcpState(self, MacAddr, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('MacAddr')
-            header.append('ServerIp')
-            header.append('OfferedIp')
-            header.append('GatewayIp')
-            header.append('AcceptedIp')
-            header.append('RequestedIp')
-            header.append('ClientDiscover')
-            header.append('ClientRequest')
-            header.append('ClientRequests')
-            header.append('ClientResponses')
-            header.append('ServerOffer')
-            header.append('ServerAck')
-            header.append('ServerRequests')
-            header.append('ServerResponses')
-
-        rawobj = self.swtch.getDhcpRelayHostDhcpState(
-                                                      MacAddr)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['ServerIp'])
-            values.append('%s' % o['OfferedIp'])
-            values.append('%s' % o['GatewayIp'])
-            values.append('%s' % o['AcceptedIp'])
-            values.append('%s' % o['RequestedIp'])
-            values.append('%s' % o['ClientDiscover'])
-            values.append('%s' % o['ClientRequest'])
-            values.append('%s' % o['ClientRequests'])
-            values.append('%s' % o['ClientResponses'])
-            values.append('%s' % o['ServerOffer'])
-            values.append('%s' % o['ServerAck'])
-            values.append('%s' % o['ServerRequests'])
-            values.append('%s' % o['ServerResponses'])
-            rows.append(values)
-            self.tblPrintObject('DhcpRelayHostDhcpState', header, rows)
-
-        else:
-            print rawobj.content
-
-    def printDhcpRelayIntfServerStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IntfId')
-            header.append('ServerIp')
-            header.append('Request')
-            header.append('Responses')
-
-        objs = self.swtch.getAllDhcpRelayIntfServerStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IntfId'])
-            values.append('%s' % o['ServerIp'])
-            values.append('%s' % o['Request'])
-            values.append('%s' % o['Responses'])
-            rows.append(values)
-        self.tblPrintObject('DhcpRelayIntfServerState', header, rows)
-
-
-    def printDhcpRelayIntfServerState(self, IntfId, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IntfId')
-            header.append('ServerIp')
-            header.append('Request')
-            header.append('Responses')
-
-        rawobj = self.swtch.getDhcpRelayIntfServerState(
-                                                        IntfId)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IntfId'])
-            values.append('%s' % o['ServerIp'])
-            values.append('%s' % o['Request'])
-            values.append('%s' % o['Responses'])
-            rows.append(values)
-            self.tblPrintObject('DhcpRelayIntfServerState', header, rows)
-
-        else:
-            print rawobj.content
-
     def printLLDPIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -3620,62 +3533,23 @@ class FlexSwitchShow( object):
         self.tblPrintObject('EthernetPM', header, rows)
 
 
-    def printOspfVirtNbrEntryStates(self, addHeader=True, brief=None):
+    def printDHCPv6RelayGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('VirtNbrRtrId')
-            header.append('VirtNbrArea')
-            header.append('VirtNbrIpAddr')
-            header.append('VirtNbrOptions')
-            header.append('VirtNbrState')
-            header.append('VirtNbrEvents')
-            header.append('VirtNbrHelloSuppressed')
+            header.append('Vrf')
+            header.append('HopCountLimit')
+            header.append('Enable')
 
-        objs = self.swtch.getAllOspfVirtNbrEntryStates()
+        objs = self.swtch.getAllDHCPv6RelayGlobals()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['VirtNbrRtrId'])
-            values.append('%s' % o['VirtNbrArea'])
-            values.append('%s' % o['VirtNbrIpAddr'])
-            values.append('%s' % o['VirtNbrOptions'])
-            values.append('%s' % o['VirtNbrState'])
-            values.append('%s' % o['VirtNbrEvents'])
-            values.append('%s' % o['VirtNbrHelloSuppressed'])
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['HopCountLimit'])
+            values.append('%s' % o['Enable'])
             rows.append(values)
-        self.tblPrintObject('OspfVirtNbrEntryState', header, rows)
+        self.tblPrintObject('DHCPv6RelayGlobal', header, rows)
 
-
-    def printOspfVirtNbrEntryState(self, VirtNbrRtrId,VirtNbrArea, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('VirtNbrRtrId')
-            header.append('VirtNbrArea')
-            header.append('VirtNbrIpAddr')
-            header.append('VirtNbrOptions')
-            header.append('VirtNbrState')
-            header.append('VirtNbrEvents')
-            header.append('VirtNbrHelloSuppressed')
-
-        rawobj = self.swtch.getOspfVirtNbrEntryState(
-                                                     VirtNbrRtrId,
-                                                     VirtNbrArea)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['VirtNbrRtrId'])
-            values.append('%s' % o['VirtNbrArea'])
-            values.append('%s' % o['VirtNbrIpAddr'])
-            values.append('%s' % o['VirtNbrOptions'])
-            values.append('%s' % o['VirtNbrState'])
-            values.append('%s' % o['VirtNbrEvents'])
-            values.append('%s' % o['VirtNbrHelloSuppressed'])
-            rows.append(values)
-            self.tblPrintObject('OspfVirtNbrEntryState', header, rows)
-
-        else:
-            print rawobj.content
 
     def printDWDMModuleClntIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -4634,49 +4508,76 @@ class FlexSwitchShow( object):
         self.tblPrintObject('AsicGlobalPM', header, rows)
 
 
-    def printIPv4RouteHwStates(self, addHeader=True, brief=None):
+    def printFanSensorStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DestinationNw')
-            header.append('NextHopIps')
-            header.append('RouteCreatedTime')
-            header.append('RouteUpdatedTime')
+            header.append('Name')
+            header.append('CurrentSpeed')
 
-        objs = self.swtch.getAllIPv4RouteHwStates()
+        objs = self.swtch.getAllFanSensorStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['DestinationNw'])
-            values.append('%s' % o['NextHopIps'])
-            values.append('%s' % o['RouteCreatedTime'])
-            values.append('%s' % o['RouteUpdatedTime'])
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['CurrentSpeed'])
             rows.append(values)
-        self.tblPrintObject('IPv4RouteHwState', header, rows)
+        self.tblPrintObject('FanSensorState', header, rows)
 
 
-    def printIPv4RouteHwState(self, DestinationNw, addHeader=True, brief=None):
+    def printFanSensorState(self, Name, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DestinationNw')
-            header.append('NextHopIps')
-            header.append('RouteCreatedTime')
-            header.append('RouteUpdatedTime')
+            header.append('Name')
+            header.append('CurrentSpeed')
 
-        rawobj = self.swtch.getIPv4RouteHwState(
-                                                DestinationNw)
+        rawobj = self.swtch.getFanSensorState(
+                                              Name)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
-            values.append('%s' % o['DestinationNw'])
-            values.append('%s' % o['NextHopIps'])
-            values.append('%s' % o['RouteCreatedTime'])
-            values.append('%s' % o['RouteUpdatedTime'])
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['CurrentSpeed'])
             rows.append(values)
-            self.tblPrintObject('IPv4RouteHwState', header, rows)
+            self.tblPrintObject('FanSensorState', header, rows)
 
         else:
             print rawobj.content
+
+    def printCombinedFanSensorStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('CurrentSpeed')
+            header.append('HigherAlarmThreshold')
+            header.append('HigherWarningThreshold')
+            header.append('LowerWarningThreshold')
+            header.append('LowerAlarmThreshold')
+            header.append('PMClassCAdminState')
+            header.append('PMClassAAdminState')
+            header.append('AdminState')
+            header.append('PMClassBAdminState')
+
+        objs = self.swtch.getAllFanSensorStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['CurrentSpeed'])
+            r = self.swtch.getFanSensor(o['Name'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['HigherAlarmThreshold'])
+                values.append('%s' % o['HigherWarningThreshold'])
+                values.append('%s' % o['LowerWarningThreshold'])
+                values.append('%s' % o['LowerAlarmThreshold'])
+                values.append('%s' % o['PMClassCAdminState'])
+                values.append('%s' % o['PMClassAAdminState'])
+                values.append('%s' % o['AdminState'])
+                values.append('%s' % o['PMClassBAdminState'])
+            rows.append(values)
+        self.tblPrintObject('FanSensorState', header, rows)
+
 
     def printArpGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -4692,6 +4593,73 @@ class FlexSwitchShow( object):
             values.append('%s' % o['Timeout'])
             rows.append(values)
         self.tblPrintObject('ArpGlobal', header, rows)
+
+
+    def printBGPPolicyStmtStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('MatchConditions')
+            header.append('Conditions')
+            header.append('Actions')
+
+        objs = self.swtch.getAllBGPPolicyStmtStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['MatchConditions'])
+            values.append('%s' % o['Conditions'])
+            values.append('%s' % o['Actions'])
+            rows.append(values)
+        self.tblPrintObject('BGPPolicyStmtState', header, rows)
+
+
+    def printBGPPolicyStmtState(self, Name, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('MatchConditions')
+            header.append('Conditions')
+            header.append('Actions')
+
+        rawobj = self.swtch.getBGPPolicyStmtState(
+                                                  Name)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['MatchConditions'])
+            values.append('%s' % o['Conditions'])
+            values.append('%s' % o['Actions'])
+            rows.append(values)
+            self.tblPrintObject('BGPPolicyStmtState', header, rows)
+
+        else:
+            print rawobj.content
+
+    def printCombinedBGPPolicyStmtStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Name')
+            header.append('MatchConditions')
+            header.append('Conditions')
+            header.append('Actions')
+
+        objs = self.swtch.getAllBGPPolicyStmtStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['MatchConditions'])
+            values.append('%s' % o['Conditions'])
+            values.append('%s' % o['Actions'])
+            r = self.swtch.getBGPPolicyStmt(o['Name'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+            rows.append(values)
+        self.tblPrintObject('BGPPolicyStmtState', header, rows)
 
 
     def printBGPv4PeerGroups(self, addHeader=True, brief=None):
@@ -5829,111 +5797,24 @@ class FlexSwitchShow( object):
         else:
             print rawobj.content
 
-    def printIPv6IntfStates(self, addHeader=True, brief=None):
+    def printDhcpGlobalConfigs(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfRef')
-            header.append('IfIndex')
-            header.append('IpAddr')
-            header.append('OperState')
-            header.append('NumUpEvents')
-            header.append('LastUpEventTime')
-            header.append('NumDownEvents')
-            header.append('LastDownEventTime')
-            header.append('L2IntfType')
-            header.append('L2IntfId')
+            header.append('DhcpConfigKey')
+            header.append('Enable')
+            header.append('DefaultLeaseTime')
+            header.append('MaxLeaseTime')
 
-        objs = self.swtch.getAllIPv6IntfStates()
+        objs = self.swtch.getAllDhcpGlobalConfigs()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['OperState'])
-            values.append('%s' % o['NumUpEvents'])
-            values.append('%s' % o['LastUpEventTime'])
-            values.append('%s' % o['NumDownEvents'])
-            values.append('%s' % o['LastDownEventTime'])
-            values.append('%s' % o['L2IntfType'])
-            values.append('%s' % o['L2IntfId'])
+            values.append('%s' % o['DhcpConfigKey'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['DefaultLeaseTime'])
+            values.append('%s' % o['MaxLeaseTime'])
             rows.append(values)
-        self.tblPrintObject('IPv6IntfState', header, rows)
-
-
-    def printIPv6IntfState(self, IntfRef, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IntfRef')
-            header.append('IfIndex')
-            header.append('IpAddr')
-            header.append('OperState')
-            header.append('NumUpEvents')
-            header.append('LastUpEventTime')
-            header.append('NumDownEvents')
-            header.append('LastDownEventTime')
-            header.append('L2IntfType')
-            header.append('L2IntfId')
-
-        rawobj = self.swtch.getIPv6IntfState(
-                                             IntfRef)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['OperState'])
-            values.append('%s' % o['NumUpEvents'])
-            values.append('%s' % o['LastUpEventTime'])
-            values.append('%s' % o['NumDownEvents'])
-            values.append('%s' % o['LastDownEventTime'])
-            values.append('%s' % o['L2IntfType'])
-            values.append('%s' % o['L2IntfId'])
-            rows.append(values)
-            self.tblPrintObject('IPv6IntfState', header, rows)
-
-        else:
-            print rawobj.content
-
-    def printCombinedIPv6IntfStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IntfRef')
-            header.append('IfIndex')
-            header.append('IpAddr')
-            header.append('OperState')
-            header.append('NumUpEvents')
-            header.append('LastUpEventTime')
-            header.append('NumDownEvents')
-            header.append('LastDownEventTime')
-            header.append('L2IntfType')
-            header.append('L2IntfId')
-            header.append('AdminState')
-            header.append('LinkIp')
-
-        objs = self.swtch.getAllIPv6IntfStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['OperState'])
-            values.append('%s' % o['NumUpEvents'])
-            values.append('%s' % o['LastUpEventTime'])
-            values.append('%s' % o['NumDownEvents'])
-            values.append('%s' % o['LastDownEventTime'])
-            values.append('%s' % o['L2IntfType'])
-            values.append('%s' % o['L2IntfId'])
-            r = self.swtch.getIPv6Intf(o['IntfRef'])
-            if r.status_code in self.httpSuccessCodes:
-                o = r.json()['Object']
-                values.append('%s' % o['AdminState'])
-                values.append('%s' % o['LinkIp'])
-            rows.append(values)
-        self.tblPrintObject('IPv6IntfState', header, rows)
+        self.tblPrintObject('DhcpGlobalConfig', header, rows)
 
 
     def printIPv4Intfs(self, addHeader=True, brief=None):
@@ -6091,54 +5972,6 @@ class FlexSwitchShow( object):
             rows.append(values)
         self.tblPrintObject('IPv6Route', header, rows)
 
-
-    def printNDPEntryStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IpAddr')
-            header.append('MacAddr')
-            header.append('Vlan')
-            header.append('Intf')
-            header.append('IfIndex')
-
-        objs = self.swtch.getAllNDPEntryStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['Vlan'])
-            values.append('%s' % o['Intf'])
-            values.append('%s' % o['IfIndex'])
-            rows.append(values)
-        self.tblPrintObject('NDPEntryState', header, rows)
-
-
-    def printNDPEntryState(self, IpAddr, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('IpAddr')
-            header.append('MacAddr')
-            header.append('Vlan')
-            header.append('Intf')
-            header.append('IfIndex')
-
-        rawobj = self.swtch.getNDPEntryState(
-                                             IpAddr)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['Vlan'])
-            values.append('%s' % o['Intf'])
-            values.append('%s' % o['IfIndex'])
-            rows.append(values)
-            self.tblPrintObject('NDPEntryState', header, rows)
-
-        else:
-            print rawobj.content
 
     def printDWDMModuleClntIntfs(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -6497,42 +6330,87 @@ class FlexSwitchShow( object):
         self.tblPrintObject('LacpGlobalState', header, rows)
 
 
-    def printQsfps(self, addHeader=True, brief=None):
+    def printDHCPRelayIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('QsfpId')
-            header.append('HigherAlarmTemperature')
-            header.append('HigherAlarmVoltage')
-            header.append('HigherWarningTemperature')
-            header.append('HigherWarningVoltage')
-            header.append('LowerAlarmTemperature')
-            header.append('LowerAlarmVoltage')
-            header.append('LowerWarningTemperature')
-            header.append('LowerWarningVoltage')
-            header.append('PMClassBAdminState')
-            header.append('PMClassCAdminState')
-            header.append('PMClassAAdminState')
-            header.append('AdminState')
+            header.append('IntfRef')
+            header.append('TotalDrops')
+            header.append('TotalDhcpClientRx')
+            header.append('TotalDhcpClientTx')
+            header.append('TotalDhcpServerRx')
+            header.append('TotalDhcpServerTx')
 
-        objs = self.swtch.getAllQsfps()
+        objs = self.swtch.getAllDHCPRelayIntfStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['QsfpId'])
-            values.append('%s' % o['HigherAlarmTemperature'])
-            values.append('%s' % o['HigherAlarmVoltage'])
-            values.append('%s' % o['HigherWarningTemperature'])
-            values.append('%s' % o['HigherWarningVoltage'])
-            values.append('%s' % o['LowerAlarmTemperature'])
-            values.append('%s' % o['LowerAlarmVoltage'])
-            values.append('%s' % o['LowerWarningTemperature'])
-            values.append('%s' % o['LowerWarningVoltage'])
-            values.append('%s' % o['PMClassBAdminState'])
-            values.append('%s' % o['PMClassCAdminState'])
-            values.append('%s' % o['PMClassAAdminState'])
-            values.append('%s' % o['AdminState'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['TotalDrops'])
+            values.append('%s' % o['TotalDhcpClientRx'])
+            values.append('%s' % o['TotalDhcpClientTx'])
+            values.append('%s' % o['TotalDhcpServerRx'])
+            values.append('%s' % o['TotalDhcpServerTx'])
             rows.append(values)
-        self.tblPrintObject('Qsfp', header, rows)
+        self.tblPrintObject('DHCPRelayIntfState', header, rows)
+
+
+    def printDHCPRelayIntfState(self, IntfRef, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('TotalDrops')
+            header.append('TotalDhcpClientRx')
+            header.append('TotalDhcpClientTx')
+            header.append('TotalDhcpServerRx')
+            header.append('TotalDhcpServerTx')
+
+        rawobj = self.swtch.getDHCPRelayIntfState(
+                                                  IntfRef)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['TotalDrops'])
+            values.append('%s' % o['TotalDhcpClientRx'])
+            values.append('%s' % o['TotalDhcpClientTx'])
+            values.append('%s' % o['TotalDhcpServerRx'])
+            values.append('%s' % o['TotalDhcpServerTx'])
+            rows.append(values)
+            self.tblPrintObject('DHCPRelayIntfState', header, rows)
+
+        else:
+            print rawobj.content
+
+    def printCombinedDHCPRelayIntfStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('TotalDrops')
+            header.append('TotalDhcpClientRx')
+            header.append('TotalDhcpClientTx')
+            header.append('TotalDhcpServerRx')
+            header.append('TotalDhcpServerTx')
+            header.append('Enable')
+            header.append('ServerIp')
+
+        objs = self.swtch.getAllDHCPRelayIntfStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['TotalDrops'])
+            values.append('%s' % o['TotalDhcpClientRx'])
+            values.append('%s' % o['TotalDhcpClientTx'])
+            values.append('%s' % o['TotalDhcpServerRx'])
+            values.append('%s' % o['TotalDhcpServerTx'])
+            r = self.swtch.getDHCPRelayIntf(o['IntfRef'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['Enable'])
+                values.append('%s' % o['ServerIp'])
+            rows.append(values)
+        self.tblPrintObject('DHCPRelayIntfState', header, rows)
 
 
     def printVoltageSensorPMDataStates(self, addHeader=True, brief=None):
@@ -6947,6 +6825,118 @@ class FlexSwitchShow( object):
         self.tblPrintObject('IpTableAcl', header, rows)
 
 
+    def printDHCPv6RelayClientStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('MacAddr')
+            header.append('ServerIp')
+            header.append('OfferedIp')
+            header.append('GatewayIp')
+            header.append('AcceptedIp')
+            header.append('RequestedIp')
+            header.append('ClientSolicit')
+            header.append('ClientRequest')
+            header.append('ClientConfirm')
+            header.append('ClientRenew')
+            header.append('ClientRebind')
+            header.append('ClientRelease')
+            header.append('ClientDecline')
+            header.append('ClientInfoRequest')
+            header.append('ClientRequests')
+            header.append('ClientResponses')
+            header.append('ServerAdvertise')
+            header.append('ServerReply')
+            header.append('ServerReconfigure')
+            header.append('ServerRequests')
+            header.append('ServerResponses')
+
+        objs = self.swtch.getAllDHCPv6RelayClientStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['OfferedIp'])
+            values.append('%s' % o['GatewayIp'])
+            values.append('%s' % o['AcceptedIp'])
+            values.append('%s' % o['RequestedIp'])
+            values.append('%s' % o['ClientSolicit'])
+            values.append('%s' % o['ClientRequest'])
+            values.append('%s' % o['ClientConfirm'])
+            values.append('%s' % o['ClientRenew'])
+            values.append('%s' % o['ClientRebind'])
+            values.append('%s' % o['ClientRelease'])
+            values.append('%s' % o['ClientDecline'])
+            values.append('%s' % o['ClientInfoRequest'])
+            values.append('%s' % o['ClientRequests'])
+            values.append('%s' % o['ClientResponses'])
+            values.append('%s' % o['ServerAdvertise'])
+            values.append('%s' % o['ServerReply'])
+            values.append('%s' % o['ServerReconfigure'])
+            values.append('%s' % o['ServerRequests'])
+            values.append('%s' % o['ServerResponses'])
+            rows.append(values)
+        self.tblPrintObject('DHCPv6RelayClientState', header, rows)
+
+
+    def printDHCPv6RelayClientState(self, MacAddr, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('MacAddr')
+            header.append('ServerIp')
+            header.append('OfferedIp')
+            header.append('GatewayIp')
+            header.append('AcceptedIp')
+            header.append('RequestedIp')
+            header.append('ClientSolicit')
+            header.append('ClientRequest')
+            header.append('ClientConfirm')
+            header.append('ClientRenew')
+            header.append('ClientRebind')
+            header.append('ClientRelease')
+            header.append('ClientDecline')
+            header.append('ClientInfoRequest')
+            header.append('ClientRequests')
+            header.append('ClientResponses')
+            header.append('ServerAdvertise')
+            header.append('ServerReply')
+            header.append('ServerReconfigure')
+            header.append('ServerRequests')
+            header.append('ServerResponses')
+
+        rawobj = self.swtch.getDHCPv6RelayClientState(
+                                                      MacAddr)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['OfferedIp'])
+            values.append('%s' % o['GatewayIp'])
+            values.append('%s' % o['AcceptedIp'])
+            values.append('%s' % o['RequestedIp'])
+            values.append('%s' % o['ClientSolicit'])
+            values.append('%s' % o['ClientRequest'])
+            values.append('%s' % o['ClientConfirm'])
+            values.append('%s' % o['ClientRenew'])
+            values.append('%s' % o['ClientRebind'])
+            values.append('%s' % o['ClientRelease'])
+            values.append('%s' % o['ClientDecline'])
+            values.append('%s' % o['ClientInfoRequest'])
+            values.append('%s' % o['ClientRequests'])
+            values.append('%s' % o['ClientResponses'])
+            values.append('%s' % o['ServerAdvertise'])
+            values.append('%s' % o['ServerReply'])
+            values.append('%s' % o['ServerReconfigure'])
+            values.append('%s' % o['ServerRequests'])
+            values.append('%s' % o['ServerResponses'])
+            rows.append(values)
+            self.tblPrintObject('DHCPv6RelayClientState', header, rows)
+
+        else:
+            print rawobj.content
+
     def printIppLinkStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -7202,8 +7192,6 @@ class FlexSwitchShow( object):
             header.append('IfTransitDelay')
             header.append('IfRetransInterval')
             header.append('IfPollInterval')
-            header.append('IfAuthKey')
-            header.append('IfAuthType')
             header.append('IfHelloInterval')
             header.append('IfRtrDeadInterval')
 
@@ -7220,61 +7208,76 @@ class FlexSwitchShow( object):
             values.append('%s' % o['IfTransitDelay'])
             values.append('%s' % o['IfRetransInterval'])
             values.append('%s' % o['IfPollInterval'])
-            values.append('%s' % o['IfAuthKey'])
-            values.append('%s' % o['IfAuthType'])
             values.append('%s' % o['IfHelloInterval'])
             values.append('%s' % o['IfRtrDeadInterval'])
             rows.append(values)
         self.tblPrintObject('OspfIfEntry', header, rows)
 
 
-    def printBufferPortStatStates(self, addHeader=True, brief=None):
+    def printDHCPv6RelayIntfServerStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
             header.append('IntfRef')
-            header.append('IfIndex')
-            header.append('EgressPort')
-            header.append('IngressPort')
-            header.append('PortBufferStat')
+            header.append('ServerIp')
+            header.append('Request')
+            header.append('Responses')
 
-        objs = self.swtch.getAllBufferPortStatStates()
+        objs = self.swtch.getAllDHCPv6RelayIntfServerStates()
         for obj in objs:
             o = obj['Object']
             values = []
             values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['EgressPort'])
-            values.append('%s' % o['IngressPort'])
-            values.append('%s' % o['PortBufferStat'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['Request'])
+            values.append('%s' % o['Responses'])
             rows.append(values)
-        self.tblPrintObject('BufferPortStatState', header, rows)
+        self.tblPrintObject('DHCPv6RelayIntfServerState', header, rows)
 
 
-    def printBufferPortStatState(self, IntfRef, addHeader=True, brief=None):
+    def printDHCPv6RelayIntfServerState(self, IntfRef,ServerIp, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
             header.append('IntfRef')
-            header.append('IfIndex')
-            header.append('EgressPort')
-            header.append('IngressPort')
-            header.append('PortBufferStat')
+            header.append('ServerIp')
+            header.append('Request')
+            header.append('Responses')
 
-        rawobj = self.swtch.getBufferPortStatState(
-                                                   IntfRef)
+        rawobj = self.swtch.getDHCPv6RelayIntfServerState(
+                                                          IntfRef,
+                                                          ServerIp)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
             values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['EgressPort'])
-            values.append('%s' % o['IngressPort'])
-            values.append('%s' % o['PortBufferStat'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['Request'])
+            values.append('%s' % o['Responses'])
             rows.append(values)
-            self.tblPrintObject('BufferPortStatState', header, rows)
+            self.tblPrintObject('DHCPv6RelayIntfServerState', header, rows)
 
         else:
             print rawobj.content
+
+    def printDHCPv6RelayIntfs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('Enable')
+            header.append('ServerIp')
+            header.append('UpstreamIntfs')
+
+        objs = self.swtch.getAllDHCPv6RelayIntfs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['UpstreamIntfs'])
+            rows.append(values)
+        self.tblPrintObject('DHCPv6RelayIntf', header, rows)
+
 
     def printBGPGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -7406,7 +7409,6 @@ class FlexSwitchShow( object):
             header.append('AuthType')
             header.append('ImportAsExtern')
             header.append('AreaSummary')
-            header.append('AreaNssaTranslatorRole')
             header.append('StubDefaultCost')
 
         objs = self.swtch.getAllOspfAreaEntryStates()
@@ -7424,7 +7426,6 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['AuthType'])
                 values.append('%s' % o['ImportAsExtern'])
                 values.append('%s' % o['AreaSummary'])
-                values.append('%s' % o['AreaNssaTranslatorRole'])
                 values.append('%s' % o['StubDefaultCost'])
             rows.append(values)
         self.tblPrintObject('OspfAreaEntryState', header, rows)
@@ -8575,34 +8576,6 @@ class FlexSwitchShow( object):
         self.tblPrintObject('StpBridgeInstance', header, rows)
 
 
-    def printOspfVirtIfEntrys(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('VirtIfNeighbor')
-            header.append('VirtIfAreaId')
-            header.append('VirtIfTransitDelay')
-            header.append('VirtIfRetransInterval')
-            header.append('VirtIfHelloInterval')
-            header.append('VirtIfRtrDeadInterval')
-            header.append('VirtIfAuthKey')
-            header.append('VirtIfAuthType')
-
-        objs = self.swtch.getAllOspfVirtIfEntrys()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['VirtIfNeighbor'])
-            values.append('%s' % o['VirtIfAreaId'])
-            values.append('%s' % o['VirtIfTransitDelay'])
-            values.append('%s' % o['VirtIfRetransInterval'])
-            values.append('%s' % o['VirtIfHelloInterval'])
-            values.append('%s' % o['VirtIfRtrDeadInterval'])
-            values.append('%s' % o['VirtIfAuthKey'])
-            values.append('%s' % o['VirtIfAuthType'])
-            rows.append(values)
-        self.tblPrintObject('OspfVirtIfEntry', header, rows)
-
-
     def printStpBridgeInstanceStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -8906,6 +8879,8 @@ class FlexSwitchShow( object):
         if addHeader:
             header.append('Vni')
             header.append('VlanId')
+            header.append('IntfRefList')
+            header.append('UntagIntfRefList')
 
         objs = self.swtch.getAllVxlanInstances()
         for obj in objs:
@@ -8913,6 +8888,8 @@ class FlexSwitchShow( object):
             values = []
             values.append('%s' % o['Vni'])
             values.append('%s' % o['VlanId'])
+            values.append('%s' % o['IntfRefList'])
+            values.append('%s' % o['UntagIntfRefList'])
             rows.append(values)
         self.tblPrintObject('VxlanInstance', header, rows)
 
@@ -9485,6 +9462,90 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BGPPolicyAction', header, rows)
 
 
+    def printDHCPRelayClientStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('MacAddr')
+            header.append('ServerIp')
+            header.append('OfferedIp')
+            header.append('GatewayIp')
+            header.append('AcceptedIp')
+            header.append('RequestedIp')
+            header.append('ClientDiscover')
+            header.append('ClientRequest')
+            header.append('ClientRequests')
+            header.append('ClientResponses')
+            header.append('ServerOffer')
+            header.append('ServerAck')
+            header.append('ServerRequests')
+            header.append('ServerResponses')
+
+        objs = self.swtch.getAllDHCPRelayClientStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['OfferedIp'])
+            values.append('%s' % o['GatewayIp'])
+            values.append('%s' % o['AcceptedIp'])
+            values.append('%s' % o['RequestedIp'])
+            values.append('%s' % o['ClientDiscover'])
+            values.append('%s' % o['ClientRequest'])
+            values.append('%s' % o['ClientRequests'])
+            values.append('%s' % o['ClientResponses'])
+            values.append('%s' % o['ServerOffer'])
+            values.append('%s' % o['ServerAck'])
+            values.append('%s' % o['ServerRequests'])
+            values.append('%s' % o['ServerResponses'])
+            rows.append(values)
+        self.tblPrintObject('DHCPRelayClientState', header, rows)
+
+
+    def printDHCPRelayClientState(self, MacAddr, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('MacAddr')
+            header.append('ServerIp')
+            header.append('OfferedIp')
+            header.append('GatewayIp')
+            header.append('AcceptedIp')
+            header.append('RequestedIp')
+            header.append('ClientDiscover')
+            header.append('ClientRequest')
+            header.append('ClientRequests')
+            header.append('ClientResponses')
+            header.append('ServerOffer')
+            header.append('ServerAck')
+            header.append('ServerRequests')
+            header.append('ServerResponses')
+
+        rawobj = self.swtch.getDHCPRelayClientState(
+                                                    MacAddr)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['OfferedIp'])
+            values.append('%s' % o['GatewayIp'])
+            values.append('%s' % o['AcceptedIp'])
+            values.append('%s' % o['RequestedIp'])
+            values.append('%s' % o['ClientDiscover'])
+            values.append('%s' % o['ClientRequest'])
+            values.append('%s' % o['ClientRequests'])
+            values.append('%s' % o['ClientResponses'])
+            values.append('%s' % o['ServerOffer'])
+            values.append('%s' % o['ServerAck'])
+            values.append('%s' % o['ServerRequests'])
+            values.append('%s' % o['ServerResponses'])
+            rows.append(values)
+            self.tblPrintObject('DHCPRelayClientState', header, rows)
+
+        else:
+            print rawobj.content
+
     def printSystemSwVersionStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -9710,6 +9771,54 @@ class FlexSwitchShow( object):
             rows.append(values)
         self.tblPrintObject('SystemParamState', header, rows)
 
+
+    def printBufferPortStatStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IfIndex')
+            header.append('EgressPort')
+            header.append('IngressPort')
+            header.append('PortBufferStat')
+
+        objs = self.swtch.getAllBufferPortStatStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['EgressPort'])
+            values.append('%s' % o['IngressPort'])
+            values.append('%s' % o['PortBufferStat'])
+            rows.append(values)
+        self.tblPrintObject('BufferPortStatState', header, rows)
+
+
+    def printBufferPortStatState(self, IntfRef, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('IfIndex')
+            header.append('EgressPort')
+            header.append('IngressPort')
+            header.append('PortBufferStat')
+
+        rawobj = self.swtch.getBufferPortStatState(
+                                                   IntfRef)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['EgressPort'])
+            values.append('%s' % o['IngressPort'])
+            values.append('%s' % o['PortBufferStat'])
+            rows.append(values)
+            self.tblPrintObject('BufferPortStatState', header, rows)
+
+        else:
+            print rawobj.content
 
     def printVoltageSensorStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -10060,6 +10169,91 @@ class FlexSwitchShow( object):
             values.append('%s' % o['ConnectRetryTime'])
             rows.append(values)
         self.tblPrintObject('BGPv6PeerGroup', header, rows)
+
+
+    def printDHCPv6RelayIntfStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('TotalDrops')
+            header.append('TotalDhcpClientRx')
+            header.append('TotalDhcpClientTx')
+            header.append('TotalDhcpServerRx')
+            header.append('TotalDhcpServerTx')
+
+        objs = self.swtch.getAllDHCPv6RelayIntfStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['TotalDrops'])
+            values.append('%s' % o['TotalDhcpClientRx'])
+            values.append('%s' % o['TotalDhcpClientTx'])
+            values.append('%s' % o['TotalDhcpServerRx'])
+            values.append('%s' % o['TotalDhcpServerTx'])
+            rows.append(values)
+        self.tblPrintObject('DHCPv6RelayIntfState', header, rows)
+
+
+    def printDHCPv6RelayIntfState(self, IntfRef, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('TotalDrops')
+            header.append('TotalDhcpClientRx')
+            header.append('TotalDhcpClientTx')
+            header.append('TotalDhcpServerRx')
+            header.append('TotalDhcpServerTx')
+
+        rawobj = self.swtch.getDHCPv6RelayIntfState(
+                                                    IntfRef)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['TotalDrops'])
+            values.append('%s' % o['TotalDhcpClientRx'])
+            values.append('%s' % o['TotalDhcpClientTx'])
+            values.append('%s' % o['TotalDhcpServerRx'])
+            values.append('%s' % o['TotalDhcpServerTx'])
+            rows.append(values)
+            self.tblPrintObject('DHCPv6RelayIntfState', header, rows)
+
+        else:
+            print rawobj.content
+
+    def printCombinedDHCPv6RelayIntfStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('TotalDrops')
+            header.append('TotalDhcpClientRx')
+            header.append('TotalDhcpClientTx')
+            header.append('TotalDhcpServerRx')
+            header.append('TotalDhcpServerTx')
+            header.append('Enable')
+            header.append('ServerIp')
+            header.append('UpstreamIntfs')
+
+        objs = self.swtch.getAllDHCPv6RelayIntfStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['TotalDrops'])
+            values.append('%s' % o['TotalDhcpClientRx'])
+            values.append('%s' % o['TotalDhcpClientTx'])
+            values.append('%s' % o['TotalDhcpServerRx'])
+            values.append('%s' % o['TotalDhcpServerTx'])
+            r = self.swtch.getDHCPv6RelayIntf(o['IntfRef'])
+            if r.status_code in self.httpSuccessCodes:
+                o = r.json()['Object']
+                values.append('%s' % o['Enable'])
+                values.append('%s' % o['ServerIp'])
+                values.append('%s' % o['UpstreamIntfs'])
+            rows.append(values)
+        self.tblPrintObject('DHCPv6RelayIntfState', header, rows)
 
 
     def printArpEntryHwStates(self, addHeader=True, brief=None):
@@ -10780,8 +10974,6 @@ class FlexSwitchShow( object):
             header.append('IfTransitDelay')
             header.append('IfRetransInterval')
             header.append('IfPollInterval')
-            header.append('IfAuthKey')
-            header.append('IfAuthType')
             header.append('IfHelloInterval')
             header.append('IfRtrDeadInterval')
 
@@ -10808,8 +11000,6 @@ class FlexSwitchShow( object):
                 values.append('%s' % o['IfTransitDelay'])
                 values.append('%s' % o['IfRetransInterval'])
                 values.append('%s' % o['IfPollInterval'])
-                values.append('%s' % o['IfAuthKey'])
-                values.append('%s' % o['IfAuthType'])
                 values.append('%s' % o['IfHelloInterval'])
                 values.append('%s' % o['IfRtrDeadInterval'])
             rows.append(values)
