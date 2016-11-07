@@ -9484,30 +9484,114 @@ class FlexSwitch( object):
         return self.getObjects('BGPGlobal', self.cfgUrlBase)
 
 
-    def getTemperatureSensorPMDataState(self,
-                                        Class,
-                                        Name):
+    """
+    .. automethod :: createAclGlobal(self,
+        :param int32 Unit : Hardware unit. Hardware unit.
+        :param string GlobalDropEnable : Global traffic drop  flag Global traffic drop  flag
+
+	"""
+    def createAclGlobal(self,
+                        Unit,
+                        GlobalDropEnable='FALSE'):
         obj =  { 
-                'Class' : Class,
-                'Name' : Name,
+                'Unit' : int(Unit),
+                'GlobalDropEnable' : GlobalDropEnable,
                 }
-        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclGlobal(self,
+                        Unit):
+        obj =  { 
+                'Unit' : Unit,
+                }
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AclGlobal'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        else:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def updateAclGlobal(self,
+                        Unit,
+                        GlobalDropEnable = None):
+        obj =  {}
+        if Unit != None :
+            obj['Unit'] = int(Unit)
+
+        if GlobalDropEnable != None :
+            obj['GlobalDropEnable'] = GlobalDropEnable
+
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAclGlobalById(self,
+                             objectId,
+                             GlobalDropEnable = None):
+        obj =  {}
+        if GlobalDropEnable !=  None:
+            obj['GlobalDropEnable'] = GlobalDropEnable
+
+        reqUrl =  self.cfgUrlBase+'AclGlobal'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def patchUpdateAclGlobal(self,
+                             Unit,
+                             op,
+                             path,
+                             value,):
+        obj =  {}
+        obj['Unit'] = Unit
+        obj['patch']=[{'op':op,'path':path,'value':value}]
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
+        return r
+
+    def getAclGlobal(self,
+                     Unit):
+        obj =  { 
+                'Unit' : int(Unit),
+                }
+        reqUrl =  self.cfgUrlBase + 'AclGlobal'
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getTemperatureSensorPMDataStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'+"/%s"%(objectId)
+    def getAclGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AclGlobal'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllTemperatureSensorPMDataStates(self):
-        return self.getObjects('TemperatureSensorPMData', self.stateUrlBase)
+    def getAllAclGlobals(self):
+        return self.getObjects('AclGlobal', self.cfgUrlBase)
 
 
     def getOspfAreaEntryState(self,
@@ -13380,6 +13464,32 @@ class FlexSwitch( object):
 
     def getAllOspfGlobalStates(self):
         return self.getObjects('OspfGlobal', self.stateUrlBase)
+
+
+    def getTemperatureSensorPMDataState(self,
+                                        Class,
+                                        Name):
+        obj =  { 
+                'Class' : Class,
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getTemperatureSensorPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllTemperatureSensorPMDataStates(self):
+        return self.getObjects('TemperatureSensorPMData', self.stateUrlBase)
 
 
     """

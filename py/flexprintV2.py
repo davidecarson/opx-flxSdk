@@ -7559,46 +7559,21 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BGPGlobal', header, rows)
 
 
-    def printTemperatureSensorPMDataStates(self, addHeader=True, brief=None):
+    def printAclGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Class')
-            header.append('Name')
-            header.append('Data')
+            header.append('Unit')
+            header.append('GlobalDropEnable')
 
-        objs = self.swtch.getAllTemperatureSensorPMDataStates()
+        objs = self.swtch.getAllAclGlobals()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Class'])
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['Data'])
+            values.append('%s' % o['Unit'])
+            values.append('%s' % o['GlobalDropEnable'])
             rows.append(values)
-        self.tblPrintObject('TemperatureSensorPMDataState', header, rows)
+        self.tblPrintObject('AclGlobal', header, rows)
 
-
-    def printTemperatureSensorPMDataState(self, Class,Name, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('Class')
-            header.append('Name')
-            header.append('Data')
-
-        rawobj = self.swtch.getTemperatureSensorPMDataState(
-                                                            Class,
-                                                            Name)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['Class'])
-            values.append('%s' % o['Name'])
-            values.append('%s' % o['Data'])
-            rows.append(values)
-            self.tblPrintObject('TemperatureSensorPMDataState', header, rows)
-
-        else:
-            print rawobj.content
 
     def printOspfAreaEntryStates(self, addHeader=True, brief=None):
         header = []; rows = []
@@ -10533,6 +10508,47 @@ class FlexSwitchShow( object):
             rows.append(values)
         self.tblPrintObject('OspfGlobalState', header, rows)
 
+
+    def printTemperatureSensorPMDataStates(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Class')
+            header.append('Name')
+            header.append('Data')
+
+        objs = self.swtch.getAllTemperatureSensorPMDataStates()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Class'])
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['Data'])
+            rows.append(values)
+        self.tblPrintObject('TemperatureSensorPMDataState', header, rows)
+
+
+    def printTemperatureSensorPMDataState(self, Class,Name, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Class')
+            header.append('Name')
+            header.append('Data')
+
+        rawobj = self.swtch.getTemperatureSensorPMDataState(
+                                                            Class,
+                                                            Name)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Class'])
+            values.append('%s' % o['Name'])
+            values.append('%s' % o['Data'])
+            rows.append(values)
+            self.tblPrintObject('TemperatureSensorPMDataState', header, rows)
+
+        else:
+            print rawobj.content
 
     def printIPv6Intfs(self, addHeader=True, brief=None):
         header = []; rows = []
