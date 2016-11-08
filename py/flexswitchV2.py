@@ -2374,7 +2374,7 @@ class FlexSwitch( object):
         :param string Intf : VTEP instance identifier name. should be defined as either vtep<id#> or <id#> if the later then 'vtep' will be prepended to the <id#> example VTEP instance identifier name. should be defined as either vtep<id#> or <id#> if the later then 'vtep' will be prepended to the <id#> example
         :param uint32 Vni : VXLAN Network ID VXLAN Network ID
         :param string IntfRef : Source interface where the source ip will be derived from.  If an interface is not supplied the src-ip will be used. This attribute takes presedence over src-ip attribute. Source interface where the source ip will be derived from.  If an interface is not supplied the src-ip will be used. This attribute takes presedence over src-ip attribute.
-        :param string DstIp : Destination IP address for the static VxLAN tunnel Destination IP address for the static VxLAN tunnel
+        :param string DstIp : Destination IP address list for the VxLAN tunnel Destination IP address list for the VxLAN tunnel
         :param uint16 VlanId : Vlan Id to encapsulate with the vtep tunnel ethernet header Vlan Id to encapsulate with the vtep tunnel ethernet header
         :param uint16 TOS : Type of Service Type of Service
         :param uint32 Mtu : Set the MTU to be applied to all VTEP within this VxLAN Set the MTU to be applied to all VTEP within this VxLAN
@@ -4207,11 +4207,11 @@ class FlexSwitch( object):
         return r
 
     def getVxlanVtepInstanceState(self,
-                                  Vni,
-                                  Intf):
+                                  Intf,
+                                  Vni):
         obj =  { 
-                'Vni' : int(Vni),
                 'Intf' : Intf,
+                'Vni' : int(Vni),
                 }
         reqUrl =  self.stateUrlBase + 'VxlanVtepInstance'
         if self.authenticate == True:
@@ -9484,30 +9484,114 @@ class FlexSwitch( object):
         return self.getObjects('BGPGlobal', self.cfgUrlBase)
 
 
-    def getTemperatureSensorPMDataState(self,
-                                        Class,
-                                        Name):
+    """
+    .. automethod :: createAclGlobal(self,
+        :param int32 Unit : Hardware unit. Hardware unit.
+        :param string GlobalDropEnable : Global traffic drop  flag Global traffic drop  flag
+
+	"""
+    def createAclGlobal(self,
+                        Unit,
+                        GlobalDropEnable='FALSE'):
         obj =  { 
-                'Class' : Class,
-                'Name' : Name,
+                'Unit' : int(Unit),
+                'GlobalDropEnable' : GlobalDropEnable,
                 }
-        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclGlobal(self,
+                        Unit):
+        obj =  { 
+                'Unit' : Unit,
+                }
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AclGlobal'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        else:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def updateAclGlobal(self,
+                        Unit,
+                        GlobalDropEnable = None):
+        obj =  {}
+        if Unit != None :
+            obj['Unit'] = int(Unit)
+
+        if GlobalDropEnable != None :
+            obj['GlobalDropEnable'] = GlobalDropEnable
+
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAclGlobalById(self,
+                             objectId,
+                             GlobalDropEnable = None):
+        obj =  {}
+        if GlobalDropEnable !=  None:
+            obj['GlobalDropEnable'] = GlobalDropEnable
+
+        reqUrl =  self.cfgUrlBase+'AclGlobal'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def patchUpdateAclGlobal(self,
+                             Unit,
+                             op,
+                             path,
+                             value,):
+        obj =  {}
+        obj['Unit'] = Unit
+        obj['patch']=[{'op':op,'path':path,'value':value}]
+        reqUrl =  self.cfgUrlBase+'AclGlobal'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
+        return r
+
+    def getAclGlobal(self,
+                     Unit):
+        obj =  { 
+                'Unit' : int(Unit),
+                }
+        reqUrl =  self.cfgUrlBase + 'AclGlobal'
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getTemperatureSensorPMDataStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'+"/%s"%(objectId)
+    def getAclGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AclGlobal'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllTemperatureSensorPMDataStates(self):
-        return self.getObjects('TemperatureSensorPMData', self.stateUrlBase)
+    def getAllAclGlobals(self):
+        return self.getObjects('AclGlobal', self.cfgUrlBase)
 
 
     def getOspfAreaEntryState(self,
@@ -11954,19 +12038,23 @@ class FlexSwitch( object):
         :param int32 Priority : Acl priority Acl priority
         :param string AclName : Acl rule name Acl rule name
         :param string SourceMac : Source MAC address. Source MAC address.
+        :param string SourceIpv6 : Source IPv6 address Source IPv6 address
         :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
         :param int32 L4DstPort : TCP/UDP destionation port TCP/UDP destionation port
-        :param string Proto : Protocol type TCP/UDP/ICMPv4/ICMPv6 Protocol type TCP/UDP/ICMPv4/ICMPv6
+        :param string DestIpv6 : Destination IPv6 address Destination IPv6 address
         :param string SourceMask : Network mask for source IP Network mask for source IP
         :param string DestMac : Destination MAC address Destination MAC address
+        :param string Proto : Protocol type TCP/UDP/ICMPv4/ICMPv6 Protocol type TCP/UDP/ICMPv4/ICMPv6
         :param string SrcPort : Source Port(used for mlag) Source Port(used for mlag)
         :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
         :param string DestIp : Destination IP address Destination IP address
         :param string DestMask : Network mark for dest IP Network mark for dest IP
         :param string Action : Type of action (ALLOW/DENY) Type of action (ALLOW/DENY)
-        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
+        :param string SourceMaskv6 : Network mask for source IPv6 Network mask for source IPv6
+        :param string DestMaskv6 : Network mark for dest IPv6 Network mark for dest IPv6
         :param string DstPort : Dest Port(used for mlag) Dest Port(used for mlag)
         :param string SourceIp : Source IP address Source IP address
+        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
         :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
 
 	"""
@@ -11974,37 +12062,45 @@ class FlexSwitch( object):
                   Priority,
                   AclName,
                   SourceMac='',
+                  SourceIpv6='',
                   L4MinPort=0,
                   L4DstPort=0,
-                  Proto='',
+                  DestIpv6='',
                   SourceMask='',
                   DestMac='',
+                  Proto='',
                   SrcPort='',
                   L4SrcPort=0,
                   DestIp='',
                   DestMask='',
                   Action='Allow',
-                  L4MaxPort=0,
+                  SourceMaskv6='',
+                  DestMaskv6='',
                   DstPort='',
                   SourceIp='',
+                  L4MaxPort=0,
                   L4PortMatch='NA'):
         obj =  { 
                 'Priority' : int(Priority),
                 'AclName' : AclName,
                 'SourceMac' : SourceMac,
+                'SourceIpv6' : SourceIpv6,
                 'L4MinPort' : int(L4MinPort),
                 'L4DstPort' : int(L4DstPort),
-                'Proto' : Proto,
+                'DestIpv6' : DestIpv6,
                 'SourceMask' : SourceMask,
                 'DestMac' : DestMac,
+                'Proto' : Proto,
                 'SrcPort' : SrcPort,
                 'L4SrcPort' : int(L4SrcPort),
                 'DestIp' : DestIp,
                 'DestMask' : DestMask,
                 'Action' : Action,
-                'L4MaxPort' : int(L4MaxPort),
+                'SourceMaskv6' : SourceMaskv6,
+                'DestMaskv6' : DestMaskv6,
                 'DstPort' : DstPort,
                 'SourceIp' : SourceIp,
+                'L4MaxPort' : int(L4MaxPort),
                 'L4PortMatch' : L4PortMatch,
                 }
         reqUrl =  self.cfgUrlBase+'Acl'
@@ -12040,19 +12136,23 @@ class FlexSwitch( object):
                   Priority,
                   AclName,
                   SourceMac = None,
+                  SourceIpv6 = None,
                   L4MinPort = None,
                   L4DstPort = None,
-                  Proto = None,
+                  DestIpv6 = None,
                   SourceMask = None,
                   DestMac = None,
+                  Proto = None,
                   SrcPort = None,
                   L4SrcPort = None,
                   DestIp = None,
                   DestMask = None,
                   Action = None,
-                  L4MaxPort = None,
+                  SourceMaskv6 = None,
+                  DestMaskv6 = None,
                   DstPort = None,
                   SourceIp = None,
+                  L4MaxPort = None,
                   L4PortMatch = None):
         obj =  {}
         if Priority != None :
@@ -12064,20 +12164,26 @@ class FlexSwitch( object):
         if SourceMac != None :
             obj['SourceMac'] = SourceMac
 
+        if SourceIpv6 != None :
+            obj['SourceIpv6'] = SourceIpv6
+
         if L4MinPort != None :
             obj['L4MinPort'] = int(L4MinPort)
 
         if L4DstPort != None :
             obj['L4DstPort'] = int(L4DstPort)
 
-        if Proto != None :
-            obj['Proto'] = Proto
+        if DestIpv6 != None :
+            obj['DestIpv6'] = DestIpv6
 
         if SourceMask != None :
             obj['SourceMask'] = SourceMask
 
         if DestMac != None :
             obj['DestMac'] = DestMac
+
+        if Proto != None :
+            obj['Proto'] = Proto
 
         if SrcPort != None :
             obj['SrcPort'] = SrcPort
@@ -12094,14 +12200,20 @@ class FlexSwitch( object):
         if Action != None :
             obj['Action'] = Action
 
-        if L4MaxPort != None :
-            obj['L4MaxPort'] = int(L4MaxPort)
+        if SourceMaskv6 != None :
+            obj['SourceMaskv6'] = SourceMaskv6
+
+        if DestMaskv6 != None :
+            obj['DestMaskv6'] = DestMaskv6
 
         if DstPort != None :
             obj['DstPort'] = DstPort
 
         if SourceIp != None :
             obj['SourceIp'] = SourceIp
+
+        if L4MaxPort != None :
+            obj['L4MaxPort'] = int(L4MaxPort)
 
         if L4PortMatch != None :
             obj['L4PortMatch'] = L4PortMatch
@@ -12116,23 +12228,30 @@ class FlexSwitch( object):
     def updateAclById(self,
                        objectId,
                        SourceMac = None,
+                       SourceIpv6 = None,
                        L4MinPort = None,
                        L4DstPort = None,
-                       Proto = None,
+                       DestIpv6 = None,
                        SourceMask = None,
                        DestMac = None,
+                       Proto = None,
                        SrcPort = None,
                        L4SrcPort = None,
                        DestIp = None,
                        DestMask = None,
                        Action = None,
-                       L4MaxPort = None,
+                       SourceMaskv6 = None,
+                       DestMaskv6 = None,
                        DstPort = None,
                        SourceIp = None,
+                       L4MaxPort = None,
                        L4PortMatch = None):
         obj =  {}
         if SourceMac !=  None:
             obj['SourceMac'] = SourceMac
+
+        if SourceIpv6 !=  None:
+            obj['SourceIpv6'] = SourceIpv6
 
         if L4MinPort !=  None:
             obj['L4MinPort'] = L4MinPort
@@ -12140,14 +12259,17 @@ class FlexSwitch( object):
         if L4DstPort !=  None:
             obj['L4DstPort'] = L4DstPort
 
-        if Proto !=  None:
-            obj['Proto'] = Proto
+        if DestIpv6 !=  None:
+            obj['DestIpv6'] = DestIpv6
 
         if SourceMask !=  None:
             obj['SourceMask'] = SourceMask
 
         if DestMac !=  None:
             obj['DestMac'] = DestMac
+
+        if Proto !=  None:
+            obj['Proto'] = Proto
 
         if SrcPort !=  None:
             obj['SrcPort'] = SrcPort
@@ -12164,14 +12286,20 @@ class FlexSwitch( object):
         if Action !=  None:
             obj['Action'] = Action
 
-        if L4MaxPort !=  None:
-            obj['L4MaxPort'] = L4MaxPort
+        if SourceMaskv6 !=  None:
+            obj['SourceMaskv6'] = SourceMaskv6
+
+        if DestMaskv6 !=  None:
+            obj['DestMaskv6'] = DestMaskv6
 
         if DstPort !=  None:
             obj['DstPort'] = DstPort
 
         if SourceIp !=  None:
             obj['SourceIp'] = SourceIp
+
+        if L4MaxPort !=  None:
+            obj['L4MaxPort'] = L4MaxPort
 
         if L4PortMatch !=  None:
             obj['L4PortMatch'] = L4PortMatch
@@ -13382,6 +13510,32 @@ class FlexSwitch( object):
         return self.getObjects('OspfGlobal', self.stateUrlBase)
 
 
+    def getTemperatureSensorPMDataState(self,
+                                        Class,
+                                        Name):
+        obj =  { 
+                'Class' : Class,
+                'Name' : Name,
+                }
+        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getTemperatureSensorPMDataStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'TemperatureSensorPMData'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllTemperatureSensorPMDataStates(self):
+        return self.getObjects('TemperatureSensorPMData', self.stateUrlBase)
+
+
     """
     .. automethod :: createIPv6Intf(self,
         :param string IntfRef : Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured Interface name or ifindex of port/lag or vlan on which this IPv4 object is configured
@@ -13984,7 +14138,8 @@ class FlexSwitch( object):
         :param string IpPrefix : Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix. Used in conjunction with MaskLengthRange to specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
         :param string MaskLengthRange : Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix. Used in conjuction with IpPrefix to specify specify the IP Prefix to match on when the ConditionType is MatchDstIpPrefix/MatchSrcIpPrefix.
         :param string Community : BGP Community attrribute value to match on when the conditionType is MatchCommunity - based on RFC 1997. Can either specify the well-known communities or any other community value in the format AA BGP Community attrribute value to match on when the conditionType is MatchCommunity - based on RFC 1997. Can either specify the well-known communities or any other community value in the format AA
-        :param string ExtendedCommunity : BGP Extended Community attribute value to match on when the conditionType is MatchExtendedCommunity - based on RFC 4360. BGP Extended Community attribute value to match on when the conditionType is MatchExtendedCommunity - based on RFC 4360.
+        :param string ExtendedCommunityType : Specifies BGP Extended Community type (used along with value)to match on when the conditionType is MatchExtendedCommunity - based on RFC 4360. Specifies BGP Extended Community type (used along with value)to match on when the conditionType is MatchExtendedCommunity - based on RFC 4360.
+        :param string ExtendedCommunityValue : Specifies BGP Extended Community value (used along with type)to match on when the conditionType is MatchExtendedCommunity - based on RFC 4360.This is a Specifies BGP Extended Community value (used along with type)to match on when the conditionType is MatchExtendedCommunity - based on RFC 4360.This is a
         :param string PrefixSet : Name of a pre-defined prefix set to be used as a condition qualifier. Name of a pre-defined prefix set to be used as a condition qualifier.
 
 	"""
@@ -13995,7 +14150,8 @@ class FlexSwitch( object):
                               IpPrefix,
                               MaskLengthRange,
                               Community,
-                              ExtendedCommunity,
+                              ExtendedCommunityType,
+                              ExtendedCommunityValue,
                               PrefixSet=''):
         obj =  { 
                 'Name' : Name,
@@ -14004,7 +14160,8 @@ class FlexSwitch( object):
                 'IpPrefix' : IpPrefix,
                 'MaskLengthRange' : MaskLengthRange,
                 'Community' : Community,
-                'ExtendedCommunity' : ExtendedCommunity,
+                'ExtendedCommunityType' : ExtendedCommunityType,
+                'ExtendedCommunityValue' : ExtendedCommunityValue,
                 'PrefixSet' : PrefixSet,
                 }
         reqUrl =  self.cfgUrlBase+'PolicyCondition'
@@ -14041,7 +14198,8 @@ class FlexSwitch( object):
                               IpPrefix = None,
                               MaskLengthRange = None,
                               Community = None,
-                              ExtendedCommunity = None,
+                              ExtendedCommunityType = None,
+                              ExtendedCommunityValue = None,
                               PrefixSet = None):
         obj =  {}
         if Name != None :
@@ -14062,8 +14220,11 @@ class FlexSwitch( object):
         if Community != None :
             obj['Community'] = Community
 
-        if ExtendedCommunity != None :
-            obj['ExtendedCommunity'] = ExtendedCommunity
+        if ExtendedCommunityType != None :
+            obj['ExtendedCommunityType'] = ExtendedCommunityType
+
+        if ExtendedCommunityValue != None :
+            obj['ExtendedCommunityValue'] = ExtendedCommunityValue
 
         if PrefixSet != None :
             obj['PrefixSet'] = PrefixSet
@@ -14082,7 +14243,8 @@ class FlexSwitch( object):
                                    IpPrefix = None,
                                    MaskLengthRange = None,
                                    Community = None,
-                                   ExtendedCommunity = None,
+                                   ExtendedCommunityType = None,
+                                   ExtendedCommunityValue = None,
                                    PrefixSet = None):
         obj =  {}
         if ConditionType !=  None:
@@ -14100,8 +14262,11 @@ class FlexSwitch( object):
         if Community !=  None:
             obj['Community'] = Community
 
-        if ExtendedCommunity !=  None:
-            obj['ExtendedCommunity'] = ExtendedCommunity
+        if ExtendedCommunityType !=  None:
+            obj['ExtendedCommunityType'] = ExtendedCommunityType
+
+        if ExtendedCommunityValue !=  None:
+            obj['ExtendedCommunityValue'] = ExtendedCommunityValue
 
         if PrefixSet !=  None:
             obj['PrefixSet'] = PrefixSet
