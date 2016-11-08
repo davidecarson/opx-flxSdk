@@ -424,7 +424,8 @@ class FlexPrint( FlexSwitchShow):
             print "Bridge Priority: ", obj["Priority"]
             print "Time Since Topology Change: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTimeSinceTopologyChange uint32 //The time (in hundredths of a second) since the last time a topology change was detected by the bridge entity. For RSTP, this reports the time since the tcWhile timer for any port on this Bridge was nonzero.
             print "Topology Changes: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTopChanges              uint32 //The total number of topology changes detected by this bridge since the management entity was last reset or initialized.
-            print "Root Bridge Id: ", obj["DesignatedRoot"]
+            print "Root Bridge Mac: ", ":".join([m for i, m in enumerate(obj["DesignatedRoot"].split(":")) if i > 1])
+            print "Root Bridge Prio", ":".join([m for i, m in enumerate(obj["DesignatedRoot"].split(":")) if i <= 1])
             print "Root Cost: ", obj["RootCost"]
             print "Root Port: ", obj["RootPort"]
             print "Max Age: ", obj["MaxAge"]
