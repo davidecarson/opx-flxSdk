@@ -245,19 +245,19 @@ class FlexPrint( FlexSwitchShow):
         if len(policies) :
             print '\n'       
             for p in policies:
-            	plcy = p['Object']
-            	print 'route_policy %s %s' %(plcy['Name'],plcy['Priority'])
-            	for stmt in plcy['StatementList']:
-            		print '	priority_stmt %d'%( stmt['Priority'])
-            		print '	 match %s'%(stmt['Statement'])
-             	print '\n'
+                plcy = p['Object']
+                print 'route_policy %s %s' %(plcy['Name'],plcy['Priority'])
+                for stmt in plcy['StatementList']:
+                    print '	priority_stmt %d'%( stmt['Priority'])
+                    print '	 match %s'%(stmt['Statement'])
+                print '\n'
             #width = 20
             #print indent([labels]+rows, hasHeader=True, separateRows=False,
             #            prefix=' ', postfix=' ', headerChar= '-', delim='    ',
             #            wrapfunc=lambda x: wrap_onspace_strict(x,width))
                                 
-    def printDhcpRelayHostDhcpStates(self) :
-        hosts = self.swtch.getAllDhcpRelayHostDhcpStates()
+    def printDHCPRelayClientStates(self) :
+        hosts = self.swtch.getAllDHCPRelayClientStates()
         if len(hosts) :
             print '\n\n---- Hosts ----'
             print 'MacAddress  ServerIP   DiscoverSent@   OfferReceived@  RequestSent@  AckReceived@   OfferedIP   RequestedIP   AcceptedIP    GWIP   ClntTx  ClntRx  SvrRx  SvrTx'
