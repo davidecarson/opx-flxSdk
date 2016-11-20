@@ -322,9 +322,42 @@ class FlexPrint( FlexSwitchShow):
 #                                               vlan ['UntagIfIndexList'],
 #                                               vlan ['OperState'])
 
-    def printVrrpIntfState (self):
-        vrids = self.swtch.getAllVrrpIntfStates()
+    def printVrrpV4Intfs (self):
+        objs = self.swtch.getAllVrrpV4IntfStates()
+	if len(objs) == 0:
+	    print 'No vrrp configured'
+	else:
+	    for obj in objs:
+		o = obj['Object']
+		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
+		print 'State is %s' %(o['CurrentState'])
+		print 'Virtual IP address is %s' %(o['VirtualAddress'])
+		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print 'Master IP Address is %s' % o['MasterIp']
+		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print 'Master Down Timer is %s' %  o['DownTimer']
+		print 'Advertisement Sent %s' % o['AdverTx']
+		print 'Advertisement Recevied %s' % o['AdverRx']
+		'''
+		values = []
+		values.append('%s' % o['IntfRef'])
+		values.append('%s' % o['VRID'])
+		values.append('%s' % o['OperState'])
+		values.append('%s' % o['CurrentState'])
+		values.append('%s' % o['MasterIp'])
+		values.append('%s' % o['AdverRx'])
+		values.append('%s' % o['AdverTx'])
+		values.append('%s' % o['LastAdverRx'])
+		values.append('%s' % o['LastAdverTx'])
+		values.append('%s' % o['IntfIpAddr'])
+		values.append('%s' % o['VirtualAddress'])
+		values.append('%s' % o['VirtualMACAddress'])
+		values.append('%s' % o['DownTimer'])
+		values.append('%s' % o['AdvertisementInterval'])
+		'''
         '''
+        vrids = self.swtch.getAllVrrpIntfStates()
 	entry.IfIndex = gblInfo.IntfConfig.IfIndex
 	entry.VRID = gblInfo.IntfConfig.VRID
 	entry.IntfIpAddr = gblInfo.IpAddr
@@ -335,7 +368,6 @@ class FlexPrint( FlexSwitchShow):
 	entry.VirtualRouterMACAddress = gblInfo.IntfConfig.VirtualRouterMACAddress
 	entry.SkewTime = gblInfo.SkewTime
 	entry.MasterDownInterval = gblInfo.MasterDownInterval
-        '''
         if len(vrids):
             print ''
             print 'IfIndex   VRID    Vip     Priority   State     ViMac              IntfIp      Preempt  Advertise    Skew  Master_Down'
@@ -354,6 +386,7 @@ class FlexPrint( FlexSwitchShow):
                                                                    entry ['SkewTime'],
                                                                    entry ['MasterDownTimer'])
             print ''
+        '''
 
     def printOspfLsdbEntryStates(self) :
         lsas = self.swtch.getAllOspfLsdbEntryStates()
