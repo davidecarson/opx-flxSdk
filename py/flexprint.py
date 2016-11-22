@@ -322,39 +322,48 @@ class FlexPrint( FlexSwitchShow):
 #                                               vlan ['UntagIfIndexList'],
 #                                               vlan ['OperState'])
 
-    def printVrrpIntfState (self):
-        vrids = self.swtch.getAllVrrpIntfStates()
-        '''
-	entry.IfIndex = gblInfo.IntfConfig.IfIndex
-	entry.VRID = gblInfo.IntfConfig.VRID
-	entry.IntfIpAddr = gblInfo.IpAddr
-	entry.Priority = gblInfo.IntfConfig.Priority
-	entry.VirtualIPv4Addr = gblInfo.IntfConfig.VirtualIPv4Addr
-	entry.AdvertisementInterval = gblInfo.IntfConfig.AdvertisementInterval
-	entry.PreemptMode = gblInfo.IntfConfig.PreemptMode
-	entry.VirtualRouterMACAddress = gblInfo.IntfConfig.VirtualRouterMACAddress
-	entry.SkewTime = gblInfo.SkewTime
-	entry.MasterDownInterval = gblInfo.MasterDownInterval
-        '''
-        if len(vrids):
-            print ''
-            print 'IfIndex   VRID    Vip     Priority   State     ViMac              IntfIp      Preempt  Advertise    Skew  Master_Down'
-            print '================================================================================================================'
-            for fObject in vrids:
-                entry = fObject['Object']
-                print '%s   %s  %s     %s   %s   %s      %s   %s    %s            %s      %s' %(entry ['IfIndex'],
-                                                                   entry ['VRID'],
-                                                                   entry ['VirtualIPv4Addr'],
-                                                                   entry ['Priority'],
-                                                                   entry ['VrrpState'],
-                                                                   entry ['VirtualRouterMACAddress'],
-                                                                   entry ['IntfIpAddr'],
-                                                                   entry ['PreemptMode'],
-                                                                   entry ['AdvertisementInterval'],
-                                                                   entry ['SkewTime'],
-                                                                   entry ['MasterDownTimer'])
-            print ''
+    def printVrrpV4IntfStates (self):
+        objs = self.swtch.getAllVrrpV4IntfStates()
+	if len(objs) == 0:
+	    print 'No vrrp configured'
+	else:
+	    for obj in objs:
+		o = obj['Object']
+                print ''
+		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
+		print 'State is %s' %(o['CurrentState'])
+		print 'Virtual IP address is %s' %(o['VirtualAddress'])
+		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print 'Master IP Address is %s' % o['MasterIp']
+		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print 'Master Down Timer is %s' %  o['DownTimer']
+		print 'Advertisement Sent %s' % o['AdverTx']
+		print 'Advertisement Recevied %s' % o['AdverRx']
+                print ''
+                print ''
 
+    def printVrrpV6IntfStates (self):
+        objs = self.swtch.getAllVrrpV6IntfStates()
+	if len(objs) == 0:
+	    print 'No vrrp configured'
+	else:
+	    for obj in objs:
+		o = obj['Object']
+                print ''
+		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
+		print 'State is %s' %(o['CurrentState'])
+		print 'Virtual IP address is %s' %(o['VirtualAddress'])
+		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print 'Master IP Address is %s' % o['MasterIp']
+		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print 'Master Down Timer is %s' %  o['DownTimer']
+		print 'Advertisement Sent %s' % o['AdverTx']
+		print 'Advertisement Recevied %s' % o['AdverRx']
+                print ''
+                print ''
+    
     def printOspfLsdbEntryStates(self) :
         lsas = self.swtch.getAllOspfLsdbEntryStates()
         if len(lsas) :
