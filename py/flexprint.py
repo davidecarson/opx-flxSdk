@@ -273,19 +273,19 @@ class FlexPrint( FlexSwitchShow):
         if len(policies) :
             print '\n'       
             for p in policies:
-            	plcy = p['Object']
-            	print 'route_policy %s %s' %(plcy['Name'],plcy['Priority'])
-            	for stmt in plcy['StatementList']:
-            		print '	priority_stmt %d'%( stmt['Priority'])
-            		print '	 match %s'%(stmt['Statement'])
-             	print '\n'
+                plcy = p['Object']
+                print 'route_policy %s %s' %(plcy['Name'],plcy['Priority'])
+                for stmt in plcy['StatementList']:
+                    print '	priority_stmt %d'%( stmt['Priority'])
+                    print '	 match %s'%(stmt['Statement'])
+                print '\n'
             #width = 20
             #print indent([labels]+rows, hasHeader=True, separateRows=False,
             #            prefix=' ', postfix=' ', headerChar= '-', delim='    ',
             #            wrapfunc=lambda x: wrap_onspace_strict(x,width))
                                 
-    def printDhcpRelayHostDhcpStates(self) :
-        hosts = self.swtch.getAllDhcpRelayHostDhcpStates()
+    def printDHCPRelayClientStates(self) :
+        hosts = self.swtch.getAllDHCPRelayClientStates()
         if len(hosts) :
             print '\n\n---- Hosts ----'
             print 'MacAddress  ServerIP   DiscoverSent@   OfferReceived@  RequestSent@  AckReceived@   OfferedIP   RequestedIP   AcceptedIP    GWIP   ClntTx  ClntRx  SvrRx  SvrTx'
@@ -322,39 +322,48 @@ class FlexPrint( FlexSwitchShow):
 #                                               vlan ['UntagIfIndexList'],
 #                                               vlan ['OperState'])
 
-    def printVrrpIntfState (self):
-        vrids = self.swtch.getAllVrrpIntfStates()
-        '''
-	entry.IfIndex = gblInfo.IntfConfig.IfIndex
-	entry.VRID = gblInfo.IntfConfig.VRID
-	entry.IntfIpAddr = gblInfo.IpAddr
-	entry.Priority = gblInfo.IntfConfig.Priority
-	entry.VirtualIPv4Addr = gblInfo.IntfConfig.VirtualIPv4Addr
-	entry.AdvertisementInterval = gblInfo.IntfConfig.AdvertisementInterval
-	entry.PreemptMode = gblInfo.IntfConfig.PreemptMode
-	entry.VirtualRouterMACAddress = gblInfo.IntfConfig.VirtualRouterMACAddress
-	entry.SkewTime = gblInfo.SkewTime
-	entry.MasterDownInterval = gblInfo.MasterDownInterval
-        '''
-        if len(vrids):
-            print ''
-            print 'IfIndex   VRID    Vip     Priority   State     ViMac              IntfIp      Preempt  Advertise    Skew  Master_Down'
-            print '================================================================================================================'
-            for fObject in vrids:
-                entry = fObject['Object']
-                print '%s   %s  %s     %s   %s   %s      %s   %s    %s            %s      %s' %(entry ['IfIndex'],
-                                                                   entry ['VRID'],
-                                                                   entry ['VirtualIPv4Addr'],
-                                                                   entry ['Priority'],
-                                                                   entry ['VrrpState'],
-                                                                   entry ['VirtualRouterMACAddress'],
-                                                                   entry ['IntfIpAddr'],
-                                                                   entry ['PreemptMode'],
-                                                                   entry ['AdvertisementInterval'],
-                                                                   entry ['SkewTime'],
-                                                                   entry ['MasterDownTimer'])
-            print ''
+    def printVrrpV4IntfStates (self):
+        objs = self.swtch.getAllVrrpV4IntfStates()
+	if len(objs) == 0:
+	    print 'No vrrp configured'
+	else:
+	    for obj in objs:
+		o = obj['Object']
+                print ''
+		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
+		print 'State is %s' %(o['CurrentState'])
+		print 'Virtual IP address is %s' %(o['VirtualAddress'])
+		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print 'Master IP Address is %s' % o['MasterIp']
+		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print 'Master Down Timer is %s' %  o['DownTimer']
+		print 'Advertisement Sent %s' % o['AdverTx']
+		print 'Advertisement Recevied %s' % o['AdverRx']
+                print ''
+                print ''
 
+    def printVrrpV6IntfStates (self):
+        objs = self.swtch.getAllVrrpV6IntfStates()
+	if len(objs) == 0:
+	    print 'No vrrp configured'
+	else:
+	    for obj in objs:
+		o = obj['Object']
+                print ''
+		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
+		print 'State is %s' %(o['CurrentState'])
+		print 'Virtual IP address is %s' %(o['VirtualAddress'])
+		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print 'Master IP Address is %s' % o['MasterIp']
+		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print 'Master Down Timer is %s' %  o['DownTimer']
+		print 'Advertisement Sent %s' % o['AdverTx']
+		print 'Advertisement Recevied %s' % o['AdverRx']
+                print ''
+                print ''
+    
     def printOspfLsdbEntryStates(self) :
         lsas = self.swtch.getAllOspfLsdbEntryStates()
         if len(lsas) :
@@ -452,7 +461,8 @@ class FlexPrint( FlexSwitchShow):
             print "Bridge Priority: ", obj["Priority"]
             print "Time Since Topology Change: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTimeSinceTopologyChange uint32 //The time (in hundredths of a second) since the last time a topology change was detected by the bridge entity. For RSTP, this reports the time since the tcWhile timer for any port on this Bridge was nonzero.
             print "Topology Changes: UNSUPPORTED" #nextStpBridgeState.Dot1dStpTopChanges              uint32 //The total number of topology changes detected by this bridge since the management entity was last reset or initialized.
-            print "Root Bridge Id: ", obj["DesignatedRoot"]
+            print "Root Bridge Mac: ", ":".join([m for i, m in enumerate(obj["DesignatedRoot"].split(":")) if i > 1])
+            print "Root Bridge Prio", ":".join([m for i, m in enumerate(obj["DesignatedRoot"].split(":")) if i <= 1])
             print "Root Cost: ", obj["RootCost"]
             print "Root Port: ", obj["RootPort"]
             print "Max Age: ", obj["MaxAge"]

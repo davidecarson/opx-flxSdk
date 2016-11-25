@@ -9907,14 +9907,15 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createAclGlobal(self,
-        :param int32 Unit : Indicates aclGlobal instance. Indicates aclGlobal instance.
+        :param int32 Unit : Hardware unit. Hardware unit.
         :param string GlobalDropEnable : Global traffic drop  flag Global traffic drop  flag
 
 	"""
     def createAclGlobal(self,
+                        Unit,
                         GlobalDropEnable='FALSE'):
         obj =  { 
-                'Unit' : int(0),
+                'Unit' : int(Unit),
                 'GlobalDropEnable' : GlobalDropEnable,
                 }
         reqUrl =  self.cfgUrlBase+'AclGlobal'
@@ -10088,7 +10089,7 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createAclGroup(self,
-        :param string GroupName : Acl group name to be used to refer to this ACL. This name is matched with AclName from Acl and  corresponding Acls are added in the order of priority of Acl. Acl group name to be used to refer to this ACL. This name is matched with AclName from Acl and  corresponding Acls are added in the order of priority of Acl.
+        :param string GroupName : Acl name to be used to refer to this ACL Acl name to be used to refer to this ACL
         :param string IntfList : list of IntfRef can be port/lag object list of IntfRef can be port/lag object
         :param string Direction : IN/OUT direction in which ACL to be applied IN/OUT direction in which ACL to be applied
 
@@ -12645,8 +12646,8 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createAcl(self,
-        :param int32 Priority : Acl priority. Acls with higher priority will have precedence over with lower. Acl priority. Acls with higher priority will have precedence over with lower.
-        :param string AclName : Acl rule name. Rule Name should match with GroupName from AclGroup. Acl rule name. Rule Name should match with GroupName from AclGroup.
+        :param int32 Priority : Acl priority Acl priority
+        :param string AclName : Acl rule name Acl rule name
         :param string SourceMac : Source MAC address. Source MAC address.
         :param string SourceIpv6 : Source IPv6 address Source IPv6 address
         :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
@@ -12655,14 +12656,14 @@ class FlexSwitch( object):
         :param string SourceMask : Network mask for source IP Network mask for source IP
         :param string DestMac : Destination MAC address Destination MAC address
         :param string Proto : Protocol type TCP/UDP/ICMPv4/ICMPv6 Protocol type TCP/UDP/ICMPv4/ICMPv6
+        :param string SrcPort : Source Port(used for mlag) Source Port(used for mlag)
         :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
         :param string DestIp : Destination IP address Destination IP address
         :param string DestMask : Network mark for dest IP Network mark for dest IP
-        :param string DstIntf : Dest Intf(used for mlag) Dest Intf(used for mlag)
-        :param string SrcIntf : Source Intf(used for mlag) Source Intf(used for mlag)
         :param string Action : Type of action (ALLOW/DENY) Type of action (ALLOW/DENY)
         :param string SourceMaskv6 : Network mask for source IPv6 Network mask for source IPv6
         :param string DestMaskv6 : Network mark for dest IPv6 Network mark for dest IPv6
+        :param string DstPort : Dest Port(used for mlag) Dest Port(used for mlag)
         :param string SourceIp : Source IP address Source IP address
         :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
         :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
@@ -12679,14 +12680,14 @@ class FlexSwitch( object):
                   SourceMask='',
                   DestMac='',
                   Proto='',
+                  SrcPort='',
                   L4SrcPort=0,
                   DestIp='',
                   DestMask='',
-                  DstIntf='',
-                  SrcIntf='',
                   Action='Allow',
                   SourceMaskv6='',
                   DestMaskv6='',
+                  DstPort='',
                   SourceIp='',
                   L4MaxPort=0,
                   L4PortMatch='NA'):
@@ -12701,14 +12702,14 @@ class FlexSwitch( object):
                 'SourceMask' : SourceMask,
                 'DestMac' : DestMac,
                 'Proto' : Proto,
+                'SrcPort' : SrcPort,
                 'L4SrcPort' : int(L4SrcPort),
                 'DestIp' : DestIp,
                 'DestMask' : DestMask,
-                'DstIntf' : DstIntf,
-                'SrcIntf' : SrcIntf,
                 'Action' : Action,
                 'SourceMaskv6' : SourceMaskv6,
                 'DestMaskv6' : DestMaskv6,
+                'DstPort' : DstPort,
                 'SourceIp' : SourceIp,
                 'L4MaxPort' : int(L4MaxPort),
                 'L4PortMatch' : L4PortMatch,
@@ -12753,14 +12754,14 @@ class FlexSwitch( object):
                   SourceMask = None,
                   DestMac = None,
                   Proto = None,
+                  SrcPort = None,
                   L4SrcPort = None,
                   DestIp = None,
                   DestMask = None,
-                  DstIntf = None,
-                  SrcIntf = None,
                   Action = None,
                   SourceMaskv6 = None,
                   DestMaskv6 = None,
+                  DstPort = None,
                   SourceIp = None,
                   L4MaxPort = None,
                   L4PortMatch = None):
@@ -12795,6 +12796,9 @@ class FlexSwitch( object):
         if Proto != None :
             obj['Proto'] = Proto
 
+        if SrcPort != None :
+            obj['SrcPort'] = SrcPort
+
         if L4SrcPort != None :
             obj['L4SrcPort'] = int(L4SrcPort)
 
@@ -12804,12 +12808,6 @@ class FlexSwitch( object):
         if DestMask != None :
             obj['DestMask'] = DestMask
 
-        if DstIntf != None :
-            obj['DstIntf'] = DstIntf
-
-        if SrcIntf != None :
-            obj['SrcIntf'] = SrcIntf
-
         if Action != None :
             obj['Action'] = Action
 
@@ -12818,6 +12816,9 @@ class FlexSwitch( object):
 
         if DestMaskv6 != None :
             obj['DestMaskv6'] = DestMaskv6
+
+        if DstPort != None :
+            obj['DstPort'] = DstPort
 
         if SourceIp != None :
             obj['SourceIp'] = SourceIp
@@ -12845,14 +12846,14 @@ class FlexSwitch( object):
                        SourceMask = None,
                        DestMac = None,
                        Proto = None,
+                       SrcPort = None,
                        L4SrcPort = None,
                        DestIp = None,
                        DestMask = None,
-                       DstIntf = None,
-                       SrcIntf = None,
                        Action = None,
                        SourceMaskv6 = None,
                        DestMaskv6 = None,
+                       DstPort = None,
                        SourceIp = None,
                        L4MaxPort = None,
                        L4PortMatch = None):
@@ -12881,6 +12882,9 @@ class FlexSwitch( object):
         if Proto !=  None:
             obj['Proto'] = Proto
 
+        if SrcPort !=  None:
+            obj['SrcPort'] = SrcPort
+
         if L4SrcPort !=  None:
             obj['L4SrcPort'] = L4SrcPort
 
@@ -12890,12 +12894,6 @@ class FlexSwitch( object):
         if DestMask !=  None:
             obj['DestMask'] = DestMask
 
-        if DstIntf !=  None:
-            obj['DstIntf'] = DstIntf
-
-        if SrcIntf !=  None:
-            obj['SrcIntf'] = SrcIntf
-
         if Action !=  None:
             obj['Action'] = Action
 
@@ -12904,6 +12902,9 @@ class FlexSwitch( object):
 
         if DestMaskv6 !=  None:
             obj['DestMaskv6'] = DestMaskv6
+
+        if DstPort !=  None:
+            obj['DstPort'] = DstPort
 
         if SourceIp !=  None:
             obj['SourceIp'] = SourceIp
