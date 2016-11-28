@@ -15956,7 +15956,7 @@ class FlexSwitch( object):
                    PRBSRxEnable=False,
                    Description='FP Port',
                    PRBSPolynomial='2^7',
-                   Duplex='Full Duplex',
+                   Duplex='Full_Duplex',
                    LoopbackMode='NONE',
                    EnableFEC=False,
                    AdminState='DOWN',
