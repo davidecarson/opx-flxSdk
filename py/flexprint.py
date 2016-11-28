@@ -331,15 +331,16 @@ class FlexPrint( FlexSwitchShow):
 		o = obj['Object']
                 print ''
 		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
-		print 'State is %s' %(o['CurrentState'])
-		print 'Virtual IP address is %s' %(o['VirtualAddress'])
-		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
-		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
-		print 'Master IP Address is %s' % o['MasterIp']
-		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
-		print 'Master Down Timer is %s' %  o['DownTimer']
-		print 'Advertisement Sent %s' % o['AdverTx']
-		print 'Advertisement Recevied %s' % o['AdverRx']
+                print '  Operation State is %s' %(o['OperState'])
+		print '  State is %s' %(o['CurrentState'])
+		print '  Virtual IP address is %s' %(o['VirtualAddress'])
+		print '  Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print '  Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print '  Master IP Address is %s' % o['MasterIp']
+		print '  Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print '  Master Down Timer is %s' %  o['DownTimer']
+		print '  Advertisement Sent %s' % o['AdverTx']
+		print '  Advertisement Recevied %s' % o['AdverRx']
                 print ''
                 print ''
 
@@ -352,15 +353,16 @@ class FlexPrint( FlexSwitchShow):
 		o = obj['Object']
                 print ''
 		print '%s - Group %s' %(o['IntfRef'], o['VRID'])
-		print 'State is %s' %(o['CurrentState'])
-		print 'Virtual IP address is %s' %(o['VirtualAddress'])
-		print 'Virtual MAC address is %s' %(o['VirtualMACAddress'])
-		print 'Advertisement interval is %s sec' %(o['AdvertisementInterval'])
-		print 'Master IP Address is %s' % o['MasterIp']
-		print 'Master Advertisement Interval is %s' % o['AdvertisementInterval']
-		print 'Master Down Timer is %s' %  o['DownTimer']
-		print 'Advertisement Sent %s' % o['AdverTx']
-		print 'Advertisement Recevied %s' % o['AdverRx']
+                print '  Operation State is %s' %(o['OperState'])
+		print '  State is %s' %(o['CurrentState'])
+		print '  Virtual IP address is %s' %(o['VirtualAddress'])
+		print '  Virtual MAC address is %s' %(o['VirtualMACAddress'])
+		print '  Advertisement interval is %s sec' %(o['AdvertisementInterval'])
+		print '  Master IP Address is %s' % o['MasterIp']
+		print '  Master Advertisement Interval is %s' % o['AdvertisementInterval']
+		print '  Master Down Timer is %s' %  o['DownTimer']
+		print '  Advertisement Sent %s' % o['AdverTx']
+		print '  Advertisement Recevied %s' % o['AdverRx']
                 print ''
                 print ''
     
