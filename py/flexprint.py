@@ -321,6 +321,53 @@ class FlexPrint( FlexSwitchShow):
 #                                               vlan ['IfIndexList'],
 #                                               vlan ['UntagIfIndexList'],
 #                                               vlan ['OperState'])
+    def printLLDPIntfStates(self):
+        objs = self.swtch.getAllLLDPIntfStates()
+        if len(objs) == 0:
+            print 'No lldp neighbors learned'
+        else:
+            for obj in objs:
+                o = obj['Object']
+                print ''
+                print('Interface %s' % o['IntfRef'])
+                print('  IfIndex is %s' % o['IfIndex'])
+                print('  Local Port is %s' % o['LocalPort'])
+                print('  Peer Port is %s' % o['PeerPort'])
+                print('  Peer HostName is %s' % o['PeerHostName'])
+                print('  Peer Mac Address is %s' % o['PeerMac'])
+                print('  Peer HoldTime is %s' % o['HoldTime'])
+                print('  System Description is %s' % o['SystemDescription'])
+                print('  System Capabilities is %s' % o['SystemCapabilities'])
+                print('  Enabled Capabilities is %s' % o['EnabledCapabilities'])
+                print('  Send Frames is %s' % o['SendFrames'])
+                print('  Received Frames is %s' % o['ReceivedFrames'])
+                print('  Enabled: %s' % o['Enable'])
+                print ''
+                print ''
+
+    def printLLDPIntfState(self, IntfRef):
+        rawobj = self.swtch.getLLDPIntfState(IntfRef)
+        if rawobj.status_code in self.httpSuccessCodes:
+            obj = rawobj.json()
+            o = obj['Object']
+            print ''
+            print('Interface %s' % o['IntfRef'])
+            print('  IfIndex is %s' % o['IfIndex'])
+            print('  Local Port is %s' % o['LocalPort'])
+            print('  Peer Port is %s' % o['PeerPort'])
+            print('  Peer HostName is %s' % o['PeerHostName'])
+            print('  Peer Mac Address is %s' % o['PeerMac'])
+            print('  Peer HoldTime is %s' % o['HoldTime'])
+            print('  System Description is %s' % o['SystemDescription'])
+            print('  System Capabilities is %s' % o['SystemCapabilities'])
+            print('  Enabled Capabilities is %s' % o['EnabledCapabilities'])
+            print('  Send Frames is %s' % o['SendFrames'])
+            print('  Received Frames is %s' % o['ReceivedFrames'])
+            print('  Enabled: %s' % o['Enable'])
+            print ''
+            print ''
+        else:
+            print rawobj.content
 
     def printVrrpV4IntfStates (self):
         objs = self.swtch.getAllVrrpV4IntfStates()
