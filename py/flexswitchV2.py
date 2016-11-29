@@ -4,6 +4,7 @@ import json
 import urllib2
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+
 headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
 patchheaders = {'Conent-Type':'application/json-patch+json'}
 #def processReturnCode (method) :
