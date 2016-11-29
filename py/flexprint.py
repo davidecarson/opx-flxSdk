@@ -7,6 +7,7 @@ from flexswitchV2 import FlexSwitch
 from flexprintV2 import FlexSwitchShow
 from tablePrint import *
 
+
 def getLagGroups(ip, port):
         currentMarker = 0
         nextMarker = 0
