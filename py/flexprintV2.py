@@ -3492,6 +3492,8 @@ class FlexSwitchShow( object):
             header.append('PeerMac')
             header.append('PeerPort')
             header.append('PeerHostName')
+            header.append('PortDescription')
+            header.append('VlanId')
             header.append('HoldTime')
             header.append('SystemDescription')
             header.append('SystemCapabilities')
@@ -3510,6 +3512,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PeerMac'])
             values.append('%s' % o['PeerPort'])
             values.append('%s' % o['PeerHostName'])
+            values.append('%s' % o['PortDescription'])
+            values.append('%s' % o['VlanId'])
             values.append('%s' % o['HoldTime'])
             values.append('%s' % o['SystemDescription'])
             values.append('%s' % o['SystemCapabilities'])
@@ -3530,6 +3534,8 @@ class FlexSwitchShow( object):
             header.append('PeerMac')
             header.append('PeerPort')
             header.append('PeerHostName')
+            header.append('PortDescription')
+            header.append('VlanId')
             header.append('HoldTime')
             header.append('SystemDescription')
             header.append('SystemCapabilities')
@@ -3550,6 +3556,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PeerMac'])
             values.append('%s' % o['PeerPort'])
             values.append('%s' % o['PeerHostName'])
+            values.append('%s' % o['PortDescription'])
+            values.append('%s' % o['VlanId'])
             values.append('%s' % o['HoldTime'])
             values.append('%s' % o['SystemDescription'])
             values.append('%s' % o['SystemCapabilities'])
@@ -3572,6 +3580,8 @@ class FlexSwitchShow( object):
             header.append('PeerMac')
             header.append('PeerPort')
             header.append('PeerHostName')
+            header.append('PortDescription')
+            header.append('VlanId')
             header.append('HoldTime')
             header.append('SystemDescription')
             header.append('SystemCapabilities')
@@ -3591,6 +3601,8 @@ class FlexSwitchShow( object):
             values.append('%s' % o['PeerMac'])
             values.append('%s' % o['PeerPort'])
             values.append('%s' % o['PeerHostName'])
+            values.append('%s' % o['PortDescription'])
+            values.append('%s' % o['VlanId'])
             values.append('%s' % o['HoldTime'])
             values.append('%s' % o['SystemDescription'])
             values.append('%s' % o['SystemCapabilities'])
@@ -7286,68 +7298,6 @@ class FlexSwitchShow( object):
 
         else:
             print rawobj.content
-
-    def printRedistributionPolicyStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('Source')
-            header.append('Target')
-            header.append('Policy')
-
-        objs = self.swtch.getAllRedistributionPolicyStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['Source'])
-            values.append('%s' % o['Target'])
-            values.append('%s' % o['Policy'])
-            rows.append(values)
-        self.tblPrintObject('RedistributionPolicyState', header, rows)
-
-
-    def printRedistributionPolicyState(self, Source,Target, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('Source')
-            header.append('Target')
-            header.append('Policy')
-
-        rawobj = self.swtch.getRedistributionPolicyState(
-                                                         Source,
-                                                         Target)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['Source'])
-            values.append('%s' % o['Target'])
-            values.append('%s' % o['Policy'])
-            rows.append(values)
-            self.tblPrintObject('RedistributionPolicyState', header, rows)
-
-        else:
-            print rawobj.content
-
-    def printCombinedRedistributionPolicyStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('Source')
-            header.append('Target')
-            header.append('Policy')
-
-        objs = self.swtch.getAllRedistributionPolicyStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['Source'])
-            values.append('%s' % o['Target'])
-            values.append('%s' % o['Policy'])
-            r = self.swtch.getRedistributionPolicy(o['Source'], o['Target'])
-            if r.status_code in self.httpSuccessCodes:
-                o = r.json()['Object']
-            rows.append(values)
-        self.tblPrintObject('RedistributionPolicyState', header, rows)
-
 
     def printFanSensors(self, addHeader=True, brief=None):
         header = []; rows = []

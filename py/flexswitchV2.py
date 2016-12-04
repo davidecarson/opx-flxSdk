@@ -4,7 +4,6 @@ import json
 import urllib2
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-
 headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
 patchheaders = {'Conent-Type':'application/json-patch+json'}
 #def processReturnCode (method) :
@@ -9934,32 +9933,6 @@ class FlexSwitch( object):
                 r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
         return r
 
-    def getRedistributionPolicyState(self,
-                                     Source,
-                                     Target):
-        obj =  { 
-                'Source' : Source,
-                'Target' : Target,
-                }
-        reqUrl =  self.stateUrlBase + 'RedistributionPolicy'
-        if self.authenticate == True:
-                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def getRedistributionPolicyStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase + 'RedistributionPolicy'+"/%s"%(objectId)
-        if self.authenticate == True:
-                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
-        return r
-
-    def getAllRedistributionPolicyStates(self):
-        return self.getObjects('RedistributionPolicy', self.stateUrlBase)
-
-
     """
     .. automethod :: createFanSensor(self,
         :param string Name : Fan Sensor Name Fan Sensor Name
@@ -11876,6 +11849,23 @@ class FlexSwitch( object):
         return self.getObjects('Vlan', self.stateUrlBase)
 
 
+    """
+    .. automethod :: executeApplyConfigByFile(self,
+        :param string FileName : FileName for the config to be applied FileName for the config to be applied
+
+	"""
+    def executeApplyConfigByFile(self,
+                                 FileName='startup-config'):
+        obj =  { 
+                'FileName' : FileName,
+                }
+        reqUrl =  self.actionUrlBase+'ApplyConfigByFile'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
+
     def getIsisGlobalState(self,
                            Vrf):
         obj =  { 
@@ -12604,6 +12594,23 @@ class FlexSwitch( object):
     def getAllAsicSummaryStates(self):
         return self.getObjects('AsicSummary', self.stateUrlBase)
 
+
+    """
+    .. automethod :: executeForceApplyConfigByFile(self,
+        :param string FileName : FileName for the config to be applied FileName for the config to be applied
+
+	"""
+    def executeForceApplyConfigByFile(self,
+                                      FileName='startup-config'):
+        obj =  { 
+                'FileName' : FileName,
+                }
+        reqUrl =  self.actionUrlBase+'ForceApplyConfigByFile'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers) 
+        return r
 
     """
     .. automethod :: executeGlobalLogging(self,
@@ -15933,7 +15940,7 @@ class FlexSwitch( object):
         :param int32 Speed : Port speed in Mbps Port speed in Mbps
         :param string MediaType : Type of media inserted into this port Type of media inserted into this port
         :param int32 Mtu : Maximum transmission unit size for this port Maximum transmission unit size for this port
-        :param string BreakOutMode : Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40 Break out mode for the port. Only applicable on ports that support breakout. Valid modes - 1x40
+        :param string BreakOutMode : Break out mode for the port. Only applicable on ports that support breakout. Break out mode for the port. Only applicable on ports that support breakout.
         :param bool PRBSRxEnable : Enable/Disable PRBS checker on this port Enable/Disable PRBS checker on this port
         :param string Description : User provided string description User provided string description
         :param string PRBSPolynomial : PRBS polynomial to use for generation/checking PRBS polynomial to use for generation/checking

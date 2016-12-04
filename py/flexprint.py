@@ -7,6 +7,7 @@ from flexswitchV2 import FlexSwitch
 from flexprintV2 import FlexSwitchShow
 from tablePrint import *
 
+
 def getLagGroups(ip, port):
 
         currentMarker = 0
@@ -332,11 +333,12 @@ class FlexPrint( FlexSwitchShow):
                 print ''
                 print('Interface %s' % o['IntfRef'])
                 print('  IfIndex is %s' % o['IfIndex'])
-                print('  Local Port is %s' % o['LocalPort'])
                 print('  Peer Port is %s' % o['PeerPort'])
                 print('  Peer HostName is %s' % o['PeerHostName'])
+                print('  Peer Port Description is %s' % o['PortDescription'])
                 print('  Peer Mac Address is %s' % o['PeerMac'])
                 print('  Peer HoldTime is %s' % o['HoldTime'])
+                print('  Vlan Id is %s' % o['VlanId'])
                 print('  System Description is %s' % o['SystemDescription'])
                 print('  System Capabilities is %s' % o['SystemCapabilities'])
                 print('  Enabled Capabilities is %s' % o['EnabledCapabilities'])
@@ -354,11 +356,12 @@ class FlexPrint( FlexSwitchShow):
             print ''
             print('Interface %s' % o['IntfRef'])
             print('  IfIndex is %s' % o['IfIndex'])
-            print('  Local Port is %s' % o['LocalPort'])
             print('  Peer Port is %s' % o['PeerPort'])
             print('  Peer HostName is %s' % o['PeerHostName'])
+            print('  Peer Port Description is %s' % o['PortDescription'])
             print('  Peer Mac Address is %s' % o['PeerMac'])
             print('  Peer HoldTime is %s' % o['HoldTime'])
+            print('  Vlan Id is %s' % o['VlanId'])
             print('  System Description is %s' % o['SystemDescription'])
             print('  System Capabilities is %s' % o['SystemCapabilities'])
             print('  Enabled Capabilities is %s' % o['EnabledCapabilities'])
