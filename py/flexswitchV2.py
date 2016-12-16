@@ -1857,124 +1857,234 @@ class FlexSwitch( object):
 
 
     """
-    .. automethod :: createDHCPRelayIntf(self,
-        :param string IntfRef : DHCP Client facing interface reference for which Relay Agent needs to be configured DHCP Client facing interface reference for which Relay Agent needs to be configured
-        :param bool Enable : Interface level config for enabling/disabling the relay agent Interface level config for enabling/disabling the relay agent
-        :param string ServerIp : DHCP Server(s) where relay agent can relay client dhcp requests DHCP Server(s) where relay agent can relay client dhcp requests
+    .. automethod :: createAclIpv4Filter(self,
+        :param string FilterName : AClIpv4 filter name . AClIpv4 filter name .
+        :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
+        :param int32 L4DstPort : TCP/UDP destionation port TCP/UDP destionation port
+        :param string Proto : Protocol type TCP/UDP/ICMPv4/ICMPv6 Protocol type TCP/UDP/ICMPv4/ICMPv6
+        :param string DestIp : Destination IP address Destination IP address
+        :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
+        :param string DestMask : Network mark for dest IP Network mark for dest IP
+        :param string DstIntf : Dest Intf(used for mlag) Dest Intf(used for mlag)
+        :param string SrcIntf : Source Intf(used for mlag) Source Intf(used for mlag)
+        :param string SourceMask : Network mask for source IP Network mask for source IP
+        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
+        :param string SourceIp : Source IP address Source IP address
+        :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
 
 	"""
-    def createDHCPRelayIntf(self,
-                            IntfRef,
-                            Enable,
-                            ServerIp):
+    def createAclIpv4Filter(self,
+                            FilterName,
+                            L4MinPort=0,
+                            L4DstPort=0,
+                            Proto='',
+                            DestIp='',
+                            L4SrcPort=0,
+                            DestMask='',
+                            DstIntf='',
+                            SrcIntf='',
+                            SourceMask='',
+                            L4MaxPort=0,
+                            SourceIp='',
+                            L4PortMatch='NA'):
         obj =  { 
-                'IntfRef' : IntfRef,
-                'Enable' : True if Enable else False,
-                'ServerIp' : ServerIp,
+                'FilterName' : FilterName,
+                'L4MinPort' : int(L4MinPort),
+                'L4DstPort' : int(L4DstPort),
+                'Proto' : Proto,
+                'DestIp' : DestIp,
+                'L4SrcPort' : int(L4SrcPort),
+                'DestMask' : DestMask,
+                'DstIntf' : DstIntf,
+                'SrcIntf' : SrcIntf,
+                'SourceMask' : SourceMask,
+                'L4MaxPort' : int(L4MaxPort),
+                'SourceIp' : SourceIp,
+                'L4PortMatch' : L4PortMatch,
                 }
-        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        reqUrl =  self.cfgUrlBase+'AclIpv4Filter'
         if self.authenticate == True:
                 r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def deleteDHCPRelayIntf(self,
-                            IntfRef):
+    def deleteAclIpv4Filter(self,
+                            FilterName):
         obj =  { 
-                'IntfRef' : IntfRef,
+                'FilterName' : FilterName,
                 }
-        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        reqUrl =  self.cfgUrlBase+'AclIpv4Filter'
         if self.authenticate == True:
                 r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def deleteDHCPRelayIntfById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'+"/%s"%(objectId)
+    def deleteAclIpv4FilterById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AclIpv4Filter'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         else:
                 r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
         return r
 
-    def updateDHCPRelayIntf(self,
-                            IntfRef,
-                            Enable = None,
-                            ServerIp = None):
+    def updateAclIpv4Filter(self,
+                            FilterName,
+                            L4MinPort = None,
+                            L4DstPort = None,
+                            Proto = None,
+                            DestIp = None,
+                            L4SrcPort = None,
+                            DestMask = None,
+                            DstIntf = None,
+                            SrcIntf = None,
+                            SourceMask = None,
+                            L4MaxPort = None,
+                            SourceIp = None,
+                            L4PortMatch = None):
         obj =  {}
-        if IntfRef != None :
-            obj['IntfRef'] = IntfRef
+        if FilterName != None :
+            obj['FilterName'] = FilterName
 
-        if Enable != None :
-            obj['Enable'] = True if Enable else False
+        if L4MinPort != None :
+            obj['L4MinPort'] = int(L4MinPort)
 
-        if ServerIp != None :
-            obj['ServerIp'] = ServerIp
+        if L4DstPort != None :
+            obj['L4DstPort'] = int(L4DstPort)
 
-        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        if Proto != None :
+            obj['Proto'] = Proto
+
+        if DestIp != None :
+            obj['DestIp'] = DestIp
+
+        if L4SrcPort != None :
+            obj['L4SrcPort'] = int(L4SrcPort)
+
+        if DestMask != None :
+            obj['DestMask'] = DestMask
+
+        if DstIntf != None :
+            obj['DstIntf'] = DstIntf
+
+        if SrcIntf != None :
+            obj['SrcIntf'] = SrcIntf
+
+        if SourceMask != None :
+            obj['SourceMask'] = SourceMask
+
+        if L4MaxPort != None :
+            obj['L4MaxPort'] = int(L4MaxPort)
+
+        if SourceIp != None :
+            obj['SourceIp'] = SourceIp
+
+        if L4PortMatch != None :
+            obj['L4PortMatch'] = L4PortMatch
+
+        reqUrl =  self.cfgUrlBase+'AclIpv4Filter'
         if self.authenticate == True:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def updateDHCPRelayIntfById(self,
+    def updateAclIpv4FilterById(self,
                                  objectId,
-                                 Enable = None,
-                                 ServerIp = None):
+                                 L4MinPort = None,
+                                 L4DstPort = None,
+                                 Proto = None,
+                                 DestIp = None,
+                                 L4SrcPort = None,
+                                 DestMask = None,
+                                 DstIntf = None,
+                                 SrcIntf = None,
+                                 SourceMask = None,
+                                 L4MaxPort = None,
+                                 SourceIp = None,
+                                 L4PortMatch = None):
         obj =  {}
-        if Enable !=  None:
-            obj['Enable'] = Enable
+        if L4MinPort !=  None:
+            obj['L4MinPort'] = L4MinPort
 
-        if ServerIp !=  None:
-            obj['ServerIp'] = ServerIp
+        if L4DstPort !=  None:
+            obj['L4DstPort'] = L4DstPort
 
-        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'+"/%s"%(objectId)
+        if Proto !=  None:
+            obj['Proto'] = Proto
+
+        if DestIp !=  None:
+            obj['DestIp'] = DestIp
+
+        if L4SrcPort !=  None:
+            obj['L4SrcPort'] = L4SrcPort
+
+        if DestMask !=  None:
+            obj['DestMask'] = DestMask
+
+        if DstIntf !=  None:
+            obj['DstIntf'] = DstIntf
+
+        if SrcIntf !=  None:
+            obj['SrcIntf'] = SrcIntf
+
+        if SourceMask !=  None:
+            obj['SourceMask'] = SourceMask
+
+        if L4MaxPort !=  None:
+            obj['L4MaxPort'] = L4MaxPort
+
+        if SourceIp !=  None:
+            obj['SourceIp'] = SourceIp
+
+        if L4PortMatch !=  None:
+            obj['L4PortMatch'] = L4PortMatch
+
+        reqUrl =  self.cfgUrlBase+'AclIpv4Filter'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
-    def patchUpdateDHCPRelayIntf(self,
-                                 IntfRef,
+    def patchUpdateAclIpv4Filter(self,
+                                 FilterName,
                                  op,
                                  path,
                                  value,):
         obj =  {}
-        obj['IntfRef'] = IntfRef
+        obj['FilterName'] = FilterName
         obj['patch']=[{'op':op,'path':path,'value':value}]
-        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        reqUrl =  self.cfgUrlBase+'AclIpv4Filter'
         if self.authenticate == True:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
         return r
 
-    def getDHCPRelayIntf(self,
-                         IntfRef):
+    def getAclIpv4Filter(self,
+                         FilterName):
         obj =  { 
-                'IntfRef' : IntfRef,
+                'FilterName' : FilterName,
                 }
-        reqUrl =  self.cfgUrlBase + 'DHCPRelayIntf'
+        reqUrl =  self.cfgUrlBase + 'AclIpv4Filter'
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getDHCPRelayIntfById(self, objectId ):
-        reqUrl =  self.cfgUrlBase + 'DHCPRelayIntf'+"/%s"%(objectId)
+    def getAclIpv4FilterById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AclIpv4Filter'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllDHCPRelayIntfs(self):
-        return self.getObjects('DHCPRelayIntf', self.cfgUrlBase)
+    def getAllAclIpv4Filters(self):
+        return self.getObjects('AclIpv4Filter', self.cfgUrlBase)
 
 
     """
@@ -2133,30 +2243,28 @@ class FlexSwitch( object):
         return self.getObjects('SubIPv6Intf', self.cfgUrlBase)
 
 
-    def getSubIPv4IntfState(self,
-                            IntfRef,
-                            Type):
+    def getIPv6RouteState(self,
+                          DestinationNw):
         obj =  { 
-                'IntfRef' : IntfRef,
-                'Type' : Type,
+                'DestinationNw' : DestinationNw,
                 }
-        reqUrl =  self.stateUrlBase + 'SubIPv4Intf'
+        reqUrl =  self.stateUrlBase + 'IPv6Route'
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getSubIPv4IntfStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase + 'SubIPv4Intf'+"/%s"%(objectId)
+    def getIPv6RouteStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'IPv6Route'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllSubIPv4IntfStates(self):
-        return self.getObjects('SubIPv4Intf', self.stateUrlBase)
+    def getAllIPv6RouteStates(self):
+        return self.getObjects('IPv6Route', self.stateUrlBase)
 
 
     def getPolicyPrefixSetState(self,
@@ -5231,6 +5339,149 @@ class FlexSwitch( object):
 
 
     """
+    .. automethod :: createAclMacFilter(self,
+        :param string FilterName : MAC filter name . MAC filter name .
+        :param string DestMac : Destination MAC address Destination MAC address
+        :param string SourceMask : Destination MAC address Destination MAC address
+        :param string DestMask : Source MAC address Source MAC address
+        :param string SourceMac : Source MAC address. Source MAC address.
+
+	"""
+    def createAclMacFilter(self,
+                           FilterName,
+                           DestMac='',
+                           SourceMask='FF',
+                           DestMask='FF',
+                           SourceMac=''):
+        obj =  { 
+                'FilterName' : FilterName,
+                'DestMac' : DestMac,
+                'SourceMask' : SourceMask,
+                'DestMask' : DestMask,
+                'SourceMac' : SourceMac,
+                }
+        reqUrl =  self.cfgUrlBase+'AclMacFilter'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclMacFilter(self,
+                           FilterName):
+        obj =  { 
+                'FilterName' : FilterName,
+                }
+        reqUrl =  self.cfgUrlBase+'AclMacFilter'
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclMacFilterById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AclMacFilter'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        else:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def updateAclMacFilter(self,
+                           FilterName,
+                           DestMac = None,
+                           SourceMask = None,
+                           DestMask = None,
+                           SourceMac = None):
+        obj =  {}
+        if FilterName != None :
+            obj['FilterName'] = FilterName
+
+        if DestMac != None :
+            obj['DestMac'] = DestMac
+
+        if SourceMask != None :
+            obj['SourceMask'] = SourceMask
+
+        if DestMask != None :
+            obj['DestMask'] = DestMask
+
+        if SourceMac != None :
+            obj['SourceMac'] = SourceMac
+
+        reqUrl =  self.cfgUrlBase+'AclMacFilter'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateAclMacFilterById(self,
+                                objectId,
+                                DestMac = None,
+                                SourceMask = None,
+                                DestMask = None,
+                                SourceMac = None):
+        obj =  {}
+        if DestMac !=  None:
+            obj['DestMac'] = DestMac
+
+        if SourceMask !=  None:
+            obj['SourceMask'] = SourceMask
+
+        if DestMask !=  None:
+            obj['DestMask'] = DestMask
+
+        if SourceMac !=  None:
+            obj['SourceMac'] = SourceMac
+
+        reqUrl =  self.cfgUrlBase+'AclMacFilter'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def patchUpdateAclMacFilter(self,
+                                FilterName,
+                                op,
+                                path,
+                                value,):
+        obj =  {}
+        obj['FilterName'] = FilterName
+        obj['patch']=[{'op':op,'path':path,'value':value}]
+        reqUrl =  self.cfgUrlBase+'AclMacFilter'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
+        return r
+
+    def getAclMacFilter(self,
+                        FilterName):
+        obj =  { 
+                'FilterName' : FilterName,
+                }
+        reqUrl =  self.cfgUrlBase + 'AclMacFilter'
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAclMacFilterById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AclMacFilter'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllAclMacFilters(self):
+        return self.getObjects('AclMacFilter', self.cfgUrlBase)
+
+
+    """
     .. automethod :: executeDaemon(self,
         :param string Name : FlexSwitch daemon name FlexSwitch daemon name
         :param string Op : Start Start
@@ -6204,6 +6455,76 @@ class FlexSwitch( object):
         return self.getObjects('PolicyASPathSet', self.stateUrlBase)
 
 
+    def updateBfdGlobal(self,
+                        Vrf,
+                        Enable = None):
+        obj =  {}
+        if Vrf != None :
+            obj['Vrf'] = Vrf
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        reqUrl =  self.cfgUrlBase+'BfdGlobal'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateBfdGlobalById(self,
+                             objectId,
+                             Enable = None):
+        obj =  {}
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        reqUrl =  self.cfgUrlBase+'BfdGlobal'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def patchUpdateBfdGlobal(self,
+                             Vrf,
+                             op,
+                             path,
+                             value,):
+        obj =  {}
+        obj['Vrf'] = Vrf
+        obj['patch']=[{'op':op,'path':path,'value':value}]
+        reqUrl =  self.cfgUrlBase+'BfdGlobal'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
+        return r
+
+    def getBfdGlobal(self,
+                     Vrf):
+        obj =  { 
+                'Vrf' : Vrf,
+                }
+        reqUrl =  self.cfgUrlBase + 'BfdGlobal'
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getBfdGlobalById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'BfdGlobal'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllBfdGlobals(self):
+        return self.getObjects('BfdGlobal', self.cfgUrlBase)
+
+
     def getDWDMModuleClntIntfState(self,
                                    ClntIntfId,
                                    ModuleId):
@@ -6882,74 +7203,235 @@ class FlexSwitch( object):
         return self.getObjects('VrrpV4Intf', self.cfgUrlBase)
 
 
-    def updateBfdGlobal(self,
-                        Vrf,
-                        Enable = None):
+    """
+    .. automethod :: createAclIpv6Filter(self,
+        :param string FilterName : AClIpv6 filter name . AClIpv6 filter name .
+        :param string SourceIpv6 : Source IPv6 address Source IPv6 address
+        :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
+        :param int32 L4DstPort : TCP/UDP destionation port TCP/UDP destionation port
+        :param string DestIpv6 : Destination IPv6 address Destination IPv6 address
+        :param string Proto : Protocol type TCP/UDP/ICMPv4/ICMPv6 Protocol type TCP/UDP/ICMPv4/ICMPv6
+        :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
+        :param string DstIntf : Dest Intf(used for mlag) Dest Intf(used for mlag)
+        :param string SrcIntf : Source Intf(used for mlag) Source Intf(used for mlag)
+        :param string SourceMaskv6 : Network mask for source IPv6 Network mask for source IPv6
+        :param string DestMaskv6 : Network mark for dest IPv6 Network mark for dest IPv6
+        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
+        :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
+
+	"""
+    def createAclIpv6Filter(self,
+                            FilterName,
+                            SourceIpv6='',
+                            L4MinPort=0,
+                            L4DstPort=0,
+                            DestIpv6='',
+                            Proto='',
+                            L4SrcPort=0,
+                            DstIntf='',
+                            SrcIntf='',
+                            SourceMaskv6='',
+                            DestMaskv6='',
+                            L4MaxPort=0,
+                            L4PortMatch='NA'):
+        obj =  { 
+                'FilterName' : FilterName,
+                'SourceIpv6' : SourceIpv6,
+                'L4MinPort' : int(L4MinPort),
+                'L4DstPort' : int(L4DstPort),
+                'DestIpv6' : DestIpv6,
+                'Proto' : Proto,
+                'L4SrcPort' : int(L4SrcPort),
+                'DstIntf' : DstIntf,
+                'SrcIntf' : SrcIntf,
+                'SourceMaskv6' : SourceMaskv6,
+                'DestMaskv6' : DestMaskv6,
+                'L4MaxPort' : int(L4MaxPort),
+                'L4PortMatch' : L4PortMatch,
+                }
+        reqUrl =  self.cfgUrlBase+'AclIpv6Filter'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclIpv6Filter(self,
+                            FilterName):
+        obj =  { 
+                'FilterName' : FilterName,
+                }
+        reqUrl =  self.cfgUrlBase+'AclIpv6Filter'
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteAclIpv6FilterById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'AclIpv6Filter'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        else:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def updateAclIpv6Filter(self,
+                            FilterName,
+                            SourceIpv6 = None,
+                            L4MinPort = None,
+                            L4DstPort = None,
+                            DestIpv6 = None,
+                            Proto = None,
+                            L4SrcPort = None,
+                            DstIntf = None,
+                            SrcIntf = None,
+                            SourceMaskv6 = None,
+                            DestMaskv6 = None,
+                            L4MaxPort = None,
+                            L4PortMatch = None):
         obj =  {}
-        if Vrf != None :
-            obj['Vrf'] = Vrf
+        if FilterName != None :
+            obj['FilterName'] = FilterName
 
-        if Enable != None :
-            obj['Enable'] = True if Enable else False
+        if SourceIpv6 != None :
+            obj['SourceIpv6'] = SourceIpv6
 
-        reqUrl =  self.cfgUrlBase+'BfdGlobal'
+        if L4MinPort != None :
+            obj['L4MinPort'] = int(L4MinPort)
+
+        if L4DstPort != None :
+            obj['L4DstPort'] = int(L4DstPort)
+
+        if DestIpv6 != None :
+            obj['DestIpv6'] = DestIpv6
+
+        if Proto != None :
+            obj['Proto'] = Proto
+
+        if L4SrcPort != None :
+            obj['L4SrcPort'] = int(L4SrcPort)
+
+        if DstIntf != None :
+            obj['DstIntf'] = DstIntf
+
+        if SrcIntf != None :
+            obj['SrcIntf'] = SrcIntf
+
+        if SourceMaskv6 != None :
+            obj['SourceMaskv6'] = SourceMaskv6
+
+        if DestMaskv6 != None :
+            obj['DestMaskv6'] = DestMaskv6
+
+        if L4MaxPort != None :
+            obj['L4MaxPort'] = int(L4MaxPort)
+
+        if L4PortMatch != None :
+            obj['L4PortMatch'] = L4PortMatch
+
+        reqUrl =  self.cfgUrlBase+'AclIpv6Filter'
         if self.authenticate == True:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def updateBfdGlobalById(self,
-                             objectId,
-                             Enable = None):
+    def updateAclIpv6FilterById(self,
+                                 objectId,
+                                 SourceIpv6 = None,
+                                 L4MinPort = None,
+                                 L4DstPort = None,
+                                 DestIpv6 = None,
+                                 Proto = None,
+                                 L4SrcPort = None,
+                                 DstIntf = None,
+                                 SrcIntf = None,
+                                 SourceMaskv6 = None,
+                                 DestMaskv6 = None,
+                                 L4MaxPort = None,
+                                 L4PortMatch = None):
         obj =  {}
-        if Enable !=  None:
-            obj['Enable'] = Enable
+        if SourceIpv6 !=  None:
+            obj['SourceIpv6'] = SourceIpv6
 
-        reqUrl =  self.cfgUrlBase+'BfdGlobal'+"/%s"%(objectId)
+        if L4MinPort !=  None:
+            obj['L4MinPort'] = L4MinPort
+
+        if L4DstPort !=  None:
+            obj['L4DstPort'] = L4DstPort
+
+        if DestIpv6 !=  None:
+            obj['DestIpv6'] = DestIpv6
+
+        if Proto !=  None:
+            obj['Proto'] = Proto
+
+        if L4SrcPort !=  None:
+            obj['L4SrcPort'] = L4SrcPort
+
+        if DstIntf !=  None:
+            obj['DstIntf'] = DstIntf
+
+        if SrcIntf !=  None:
+            obj['SrcIntf'] = SrcIntf
+
+        if SourceMaskv6 !=  None:
+            obj['SourceMaskv6'] = SourceMaskv6
+
+        if DestMaskv6 !=  None:
+            obj['DestMaskv6'] = DestMaskv6
+
+        if L4MaxPort !=  None:
+            obj['L4MaxPort'] = L4MaxPort
+
+        if L4PortMatch !=  None:
+            obj['L4PortMatch'] = L4PortMatch
+
+        reqUrl =  self.cfgUrlBase+'AclIpv6Filter'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
         return r
 
-    def patchUpdateBfdGlobal(self,
-                             Vrf,
-                             op,
-                             path,
-                             value,):
+    def patchUpdateAclIpv6Filter(self,
+                                 FilterName,
+                                 op,
+                                 path,
+                                 value,):
         obj =  {}
-        obj['Vrf'] = Vrf
+        obj['FilterName'] = FilterName
         obj['patch']=[{'op':op,'path':path,'value':value}]
-        reqUrl =  self.cfgUrlBase+'BfdGlobal'
+        reqUrl =  self.cfgUrlBase+'AclIpv6Filter'
         if self.authenticate == True:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
         return r
 
-    def getBfdGlobal(self,
-                     Vrf):
+    def getAclIpv6Filter(self,
+                         FilterName):
         obj =  { 
-                'Vrf' : Vrf,
+                'FilterName' : FilterName,
                 }
-        reqUrl =  self.cfgUrlBase + 'BfdGlobal'
+        reqUrl =  self.cfgUrlBase + 'AclIpv6Filter'
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getBfdGlobalById(self, objectId ):
-        reqUrl =  self.cfgUrlBase + 'BfdGlobal'+"/%s"%(objectId)
+    def getAclIpv6FilterById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'AclIpv6Filter'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllBfdGlobals(self):
-        return self.getObjects('BfdGlobal', self.cfgUrlBase)
+    def getAllAclIpv6Filters(self):
+        return self.getObjects('AclIpv6Filter', self.cfgUrlBase)
 
 
     """
@@ -9429,30 +9911,6 @@ class FlexSwitch( object):
         return self.getObjects('DHCPRelayIntf', self.stateUrlBase)
 
 
-    def getAclGroupState(self,
-                         GroupName):
-        obj =  { 
-                'GroupName' : GroupName,
-                }
-        reqUrl =  self.stateUrlBase + 'AclGroup'
-        if self.authenticate == True:
-                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def getAclGroupStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase + 'AclGroup'+"/%s"%(objectId)
-        if self.authenticate == True:
-                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
-        return r
-
-    def getAllAclGroupStates(self):
-        return self.getObjects('AclGroup', self.stateUrlBase)
-
-
     def getVoltageSensorPMDataState(self,
                                     Class,
                                     Name):
@@ -10324,6 +10782,127 @@ class FlexSwitch( object):
         return self.getObjects('IppLink', self.stateUrlBase)
 
 
+    """
+    .. automethod :: createDHCPRelayIntf(self,
+        :param string IntfRef : DHCP Client facing interface reference for which Relay Agent needs to be configured DHCP Client facing interface reference for which Relay Agent needs to be configured
+        :param bool Enable : Interface level config for enabling/disabling the relay agent Interface level config for enabling/disabling the relay agent
+        :param string ServerIp : DHCP Server(s) where relay agent can relay client dhcp requests DHCP Server(s) where relay agent can relay client dhcp requests
+
+	"""
+    def createDHCPRelayIntf(self,
+                            IntfRef,
+                            Enable,
+                            ServerIp):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                'Enable' : True if Enable else False,
+                'ServerIp' : ServerIp,
+                }
+        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        if self.authenticate == True:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteDHCPRelayIntf(self,
+                            IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def deleteDHCPRelayIntfById(self, objectId ):
+        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        else:
+                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
+        return r
+
+    def updateDHCPRelayIntf(self,
+                            IntfRef,
+                            Enable = None,
+                            ServerIp = None):
+        obj =  {}
+        if IntfRef != None :
+            obj['IntfRef'] = IntfRef
+
+        if Enable != None :
+            obj['Enable'] = True if Enable else False
+
+        if ServerIp != None :
+            obj['ServerIp'] = ServerIp
+
+        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def updateDHCPRelayIntfById(self,
+                                 objectId,
+                                 Enable = None,
+                                 ServerIp = None):
+        obj =  {}
+        if Enable !=  None:
+            obj['Enable'] = Enable
+
+        if ServerIp !=  None:
+            obj['ServerIp'] = ServerIp
+
+        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
+        return r
+
+    def patchUpdateDHCPRelayIntf(self,
+                                 IntfRef,
+                                 op,
+                                 path,
+                                 value,):
+        obj =  {}
+        obj['IntfRef'] = IntfRef
+        obj['patch']=[{'op':op,'path':path,'value':value}]
+        reqUrl =  self.cfgUrlBase+'DHCPRelayIntf'
+        if self.authenticate == True:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
+        return r
+
+    def getDHCPRelayIntf(self,
+                         IntfRef):
+        obj =  { 
+                'IntfRef' : IntfRef,
+                }
+        reqUrl =  self.cfgUrlBase + 'DHCPRelayIntf'
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
+        return r
+
+    def getDHCPRelayIntfById(self, objectId ):
+        reqUrl =  self.cfgUrlBase + 'DHCPRelayIntf'+"/%s"%(objectId)
+        if self.authenticate == True:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
+        else:
+                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
+        return r
+
+    def getAllDHCPRelayIntfs(self):
+        return self.getObjects('DHCPRelayIntf', self.cfgUrlBase)
+
+
     def getDWDMModuleNwIntfState(self,
                                  NwIntfId,
                                  ModuleId):
@@ -10721,7 +11300,7 @@ class FlexSwitch( object):
 
     def updateBGPGlobal(self,
                         Vrf,
-                        RouterId = None,
+                        DefaultMED = None,
                         Defaultv4Route = None,
                         UseMultiplePaths = None,
                         Defaultv6Route = None,
@@ -10729,14 +11308,15 @@ class FlexSwitch( object):
                         EBGPMaxPaths = None,
                         EBGPAllowMultipleAS = None,
                         Disabled = None,
+                        RouterId = None,
                         IBGPMaxPaths = None,
                         Redistribution = None):
         obj =  {}
         if Vrf != None :
             obj['Vrf'] = Vrf
 
-        if RouterId != None :
-            obj['RouterId'] = RouterId
+        if DefaultMED != None :
+            obj['DefaultMED'] = int(DefaultMED)
 
         if Defaultv4Route != None :
             obj['Defaultv4Route'] = True if Defaultv4Route else False
@@ -10759,6 +11339,9 @@ class FlexSwitch( object):
         if Disabled != None :
             obj['Disabled'] = True if Disabled else False
 
+        if RouterId != None :
+            obj['RouterId'] = RouterId
+
         if IBGPMaxPaths != None :
             obj['IBGPMaxPaths'] = int(IBGPMaxPaths)
 
@@ -10774,7 +11357,7 @@ class FlexSwitch( object):
 
     def updateBGPGlobalById(self,
                              objectId,
-                             RouterId = None,
+                             DefaultMED = None,
                              Defaultv4Route = None,
                              UseMultiplePaths = None,
                              Defaultv6Route = None,
@@ -10782,11 +11365,12 @@ class FlexSwitch( object):
                              EBGPMaxPaths = None,
                              EBGPAllowMultipleAS = None,
                              Disabled = None,
+                             RouterId = None,
                              IBGPMaxPaths = None,
                              Redistribution = None):
         obj =  {}
-        if RouterId !=  None:
-            obj['RouterId'] = RouterId
+        if DefaultMED !=  None:
+            obj['DefaultMED'] = DefaultMED
 
         if Defaultv4Route !=  None:
             obj['Defaultv4Route'] = Defaultv4Route
@@ -10808,6 +11392,9 @@ class FlexSwitch( object):
 
         if Disabled !=  None:
             obj['Disabled'] = Disabled
+
+        if RouterId !=  None:
+            obj['RouterId'] = RouterId
 
         if IBGPMaxPaths !=  None:
             obj['IBGPMaxPaths'] = IBGPMaxPaths
@@ -10861,51 +11448,12 @@ class FlexSwitch( object):
         return self.getObjects('BGPGlobal', self.cfgUrlBase)
 
 
-    """
-    .. automethod :: createAclGlobal(self,
-        :param int32 Unit : Indicates aclGlobal instance. Indicates aclGlobal instance.
-        :param string GlobalDropEnable : Global traffic drop  flag Global traffic drop  flag
-
-	"""
-    def createAclGlobal(self,
-                        GlobalDropEnable='FALSE'):
-        obj =  { 
-                'Unit' : int(0),
-                'GlobalDropEnable' : GlobalDropEnable,
-                }
-        reqUrl =  self.cfgUrlBase+'AclGlobal'
-        if self.authenticate == True:
-                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def deleteAclGlobal(self,
-                        Unit):
-        obj =  { 
-                'Unit' : Unit,
-                }
-        reqUrl =  self.cfgUrlBase+'AclGlobal'
-        if self.authenticate == True:
-                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def deleteAclGlobalById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'AclGlobal'+"/%s"%(objectId)
-        if self.authenticate == True:
-                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
-        else:
-                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
-        return r
-
     def updateAclGlobal(self,
-                        Unit,
+                        AclGlobal,
                         GlobalDropEnable = None):
         obj =  {}
-        if Unit != None :
-            obj['Unit'] = int(Unit)
+        if AclGlobal != None :
+            obj['AclGlobal'] = AclGlobal
 
         if GlobalDropEnable != None :
             obj['GlobalDropEnable'] = GlobalDropEnable
@@ -10932,12 +11480,12 @@ class FlexSwitch( object):
         return r
 
     def patchUpdateAclGlobal(self,
-                             Unit,
+                             AclGlobal,
                              op,
                              path,
                              value,):
         obj =  {}
-        obj['Unit'] = Unit
+        obj['AclGlobal'] = AclGlobal
         obj['patch']=[{'op':op,'path':path,'value':value}]
         reqUrl =  self.cfgUrlBase+'AclGlobal'
         if self.authenticate == True:
@@ -10947,9 +11495,9 @@ class FlexSwitch( object):
         return r
 
     def getAclGlobal(self,
-                     Unit):
+                     AclGlobal):
         obj =  { 
-                'Unit' : int(Unit),
+                'AclGlobal' : AclGlobal,
                 }
         reqUrl =  self.cfgUrlBase + 'AclGlobal'
         if self.authenticate == True:
@@ -11040,127 +11588,6 @@ class FlexSwitch( object):
 
     def getAllLLDPGlobalStates(self):
         return self.getObjects('LLDPGlobal', self.stateUrlBase)
-
-
-    """
-    .. automethod :: createAclGroup(self,
-        :param string GroupName : Acl group name to be used to refer to this ACL. This name is matched with AclName from Acl and  corresponding Acls are added in the order of priority of Acl. Acl group name to be used to refer to this ACL. This name is matched with AclName from Acl and  corresponding Acls are added in the order of priority of Acl.
-        :param string IntfList : list of IntfRef can be port/lag object list of IntfRef can be port/lag object
-        :param string Direction : IN/OUT direction in which ACL to be applied IN/OUT direction in which ACL to be applied
-
-	"""
-    def createAclGroup(self,
-                       GroupName,
-                       IntfList,
-                       Direction='IN'):
-        obj =  { 
-                'GroupName' : GroupName,
-                'IntfList' : IntfList,
-                'Direction' : Direction,
-                }
-        reqUrl =  self.cfgUrlBase+'AclGroup'
-        if self.authenticate == True:
-                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.post(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def deleteAclGroup(self,
-                       GroupName):
-        obj =  { 
-                'GroupName' : GroupName,
-                }
-        reqUrl =  self.cfgUrlBase+'AclGroup'
-        if self.authenticate == True:
-                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.delete(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def deleteAclGroupById(self, objectId ):
-        reqUrl =  self.cfgUrlBase+'AclGroup'+"/%s"%(objectId)
-        if self.authenticate == True:
-                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
-        else:
-                r = requests.delete(reqUrl, data=None, headers=headers,timeout=self.timeout) 
-        return r
-
-    def updateAclGroup(self,
-                       GroupName,
-                       IntfList = None,
-                       Direction = None):
-        obj =  {}
-        if GroupName != None :
-            obj['GroupName'] = GroupName
-
-        if IntfList != None :
-            obj['IntfList'] = IntfList
-
-        if Direction != None :
-            obj['Direction'] = Direction
-
-        reqUrl =  self.cfgUrlBase+'AclGroup'
-        if self.authenticate == True:
-                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def updateAclGroupById(self,
-                            objectId,
-                            IntfList = None,
-                            Direction = None):
-        obj =  {}
-        if IntfList !=  None:
-            obj['IntfList'] = IntfList
-
-        if Direction !=  None:
-            obj['Direction'] = Direction
-
-        reqUrl =  self.cfgUrlBase+'AclGroup'+"/%s"%(objectId)
-        if self.authenticate == True:
-                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.patch(reqUrl, data=json.dumps(obj), headers=headers,timeout=self.timeout) 
-        return r
-
-    def patchUpdateAclGroup(self,
-                            GroupName,
-                            op,
-                            path,
-                            value,):
-        obj =  {}
-        obj['GroupName'] = GroupName
-        obj['patch']=[{'op':op,'path':path,'value':value}]
-        reqUrl =  self.cfgUrlBase+'AclGroup'
-        if self.authenticate == True:
-                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.patch(reqUrl, data=json.dumps(obj), headers=patchheaders, timeout=self.timeout) 
-        return r
-
-    def getAclGroup(self,
-                    GroupName):
-        obj =  { 
-                'GroupName' : GroupName,
-                }
-        reqUrl =  self.cfgUrlBase + 'AclGroup'
-        if self.authenticate == True:
-                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
-        return r
-
-    def getAclGroupById(self, objectId ):
-        reqUrl =  self.cfgUrlBase + 'AclGroup'+"/%s"%(objectId)
-        if self.authenticate == True:
-                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
-        else:
-                r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
-        return r
-
-    def getAllAclGroups(self):
-        return self.getObjects('AclGroup', self.cfgUrlBase)
 
 
     def updateNDPGlobal(self,
@@ -11416,28 +11843,30 @@ class FlexSwitch( object):
         return self.getObjects('BfdSession', self.cfgUrlBase)
 
 
-    def getIPv6RouteState(self,
-                          DestinationNw):
+    def getSubIPv4IntfState(self,
+                            IntfRef,
+                            Type):
         obj =  { 
-                'DestinationNw' : DestinationNw,
+                'IntfRef' : IntfRef,
+                'Type' : Type,
                 }
-        reqUrl =  self.stateUrlBase + 'IPv6Route'
+        reqUrl =  self.stateUrlBase + 'SubIPv4Intf'
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=json.dumps(obj), headers=headers, timeout=self.timeout) 
         return r
 
-    def getIPv6RouteStateById(self, objectId ):
-        reqUrl =  self.stateUrlBase + 'IPv6Route'+"/%s"%(objectId)
+    def getSubIPv4IntfStateById(self, objectId ):
+        reqUrl =  self.stateUrlBase + 'SubIPv4Intf'+"/%s"%(objectId)
         if self.authenticate == True:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout, auth=(self.user, self.passwd), verify=False) 
         else:
                 r = requests.get(reqUrl, data=None, headers=headers, timeout=self.timeout) 
         return r
 
-    def getAllIPv6RouteStates(self):
-        return self.getObjects('IPv6Route', self.stateUrlBase)
+    def getAllSubIPv4IntfStates(self):
+        return self.getObjects('SubIPv4Intf', self.stateUrlBase)
 
 
     def getPolicyConditionState(self,
@@ -13495,73 +13924,31 @@ class FlexSwitch( object):
 
     """
     .. automethod :: createAcl(self,
-        :param int32 Priority : Acl priority. Acls with higher priority will have precedence over with lower. Acl priority. Acls with higher priority will have precedence over with lower.
         :param string AclName : Acl rule name. Rule Name should match with GroupName from AclGroup. Acl rule name. Rule Name should match with GroupName from AclGroup.
-        :param string SourceMac : Source MAC address. Source MAC address.
-        :param string SourceIpv6 : Source IPv6 address Source IPv6 address
-        :param int32 L4MinPort : Min port when l4 port is specified as range Min port when l4 port is specified as range
-        :param int32 L4DstPort : TCP/UDP destionation port TCP/UDP destionation port
-        :param string DestIpv6 : Destination IPv6 address Destination IPv6 address
-        :param string SourceMask : Network mask for source IP Network mask for source IP
-        :param string DestMac : Destination MAC address Destination MAC address
-        :param string Proto : Protocol type TCP/UDP/ICMPv4/ICMPv6 Protocol type TCP/UDP/ICMPv4/ICMPv6
-        :param int32 L4SrcPort : TCP/UDP source port TCP/UDP source port
-        :param string DestIp : Destination IP address Destination IP address
-        :param string DestMask : Network mark for dest IP Network mark for dest IP
-        :param string DstIntf : Dest Intf(used for mlag) Dest Intf(used for mlag)
-        :param string SrcIntf : Source Intf(used for mlag) Source Intf(used for mlag)
+        :param string IntfList : list of IntfRef can be port/lag object list of IntfRef can be port/lag object
+        :param string AclType : Acl type IPv4/MAC/Ipv6 Acl type IPv4/MAC/Ipv6
+        :param string FilterName : Filter name for acl . Filter name for acl .
+        :param int32 Priority : Acl priority. Acls with higher priority will have precedence over with lower. Acl priority. Acls with higher priority will have precedence over with lower.
         :param string Action : Type of action (ALLOW/DENY) Type of action (ALLOW/DENY)
-        :param string SourceMaskv6 : Network mask for source IPv6 Network mask for source IPv6
-        :param string DestMaskv6 : Network mark for dest IPv6 Network mark for dest IPv6
-        :param string SourceIp : Source IP address Source IP address
-        :param int32 L4MaxPort : Max port when l4 port is specified as range Max port when l4 port is specified as range
-        :param string L4PortMatch : match condition can be EQ(equal) match condition can be EQ(equal)
+        :param string Stage : Ingress or Egress where ACL to be applied Ingress or Egress where ACL to be applied
 
 	"""
     def createAcl(self,
-                  Priority,
                   AclName,
-                  SourceMac='',
-                  SourceIpv6='',
-                  L4MinPort=0,
-                  L4DstPort=0,
-                  DestIpv6='',
-                  SourceMask='',
-                  DestMac='',
-                  Proto='',
-                  L4SrcPort=0,
-                  DestIp='',
-                  DestMask='',
-                  DstIntf='',
-                  SrcIntf='',
-                  Action='Allow',
-                  SourceMaskv6='',
-                  DestMaskv6='',
-                  SourceIp='',
-                  L4MaxPort=0,
-                  L4PortMatch='NA'):
+                  IntfList,
+                  AclType='IPv4',
+                  FilterName='',
+                  Priority=1,
+                  Action='ALLOW',
+                  Stage='IN'):
         obj =  { 
-                'Priority' : int(Priority),
                 'AclName' : AclName,
-                'SourceMac' : SourceMac,
-                'SourceIpv6' : SourceIpv6,
-                'L4MinPort' : int(L4MinPort),
-                'L4DstPort' : int(L4DstPort),
-                'DestIpv6' : DestIpv6,
-                'SourceMask' : SourceMask,
-                'DestMac' : DestMac,
-                'Proto' : Proto,
-                'L4SrcPort' : int(L4SrcPort),
-                'DestIp' : DestIp,
-                'DestMask' : DestMask,
-                'DstIntf' : DstIntf,
-                'SrcIntf' : SrcIntf,
+                'IntfList' : IntfList,
+                'AclType' : AclType,
+                'FilterName' : FilterName,
+                'Priority' : int(Priority),
                 'Action' : Action,
-                'SourceMaskv6' : SourceMaskv6,
-                'DestMaskv6' : DestMaskv6,
-                'SourceIp' : SourceIp,
-                'L4MaxPort' : int(L4MaxPort),
-                'L4PortMatch' : L4PortMatch,
+                'Stage' : Stage,
                 }
         reqUrl =  self.cfgUrlBase+'Acl'
         if self.authenticate == True:
@@ -13571,10 +13958,8 @@ class FlexSwitch( object):
         return r
 
     def deleteAcl(self,
-                  Priority,
                   AclName):
         obj =  { 
-                'Priority' : Priority,
                 'AclName' : AclName,
                 }
         reqUrl =  self.cfgUrlBase+'Acl'
@@ -13593,90 +13978,34 @@ class FlexSwitch( object):
         return r
 
     def updateAcl(self,
-                  Priority,
                   AclName,
-                  SourceMac = None,
-                  SourceIpv6 = None,
-                  L4MinPort = None,
-                  L4DstPort = None,
-                  DestIpv6 = None,
-                  SourceMask = None,
-                  DestMac = None,
-                  Proto = None,
-                  L4SrcPort = None,
-                  DestIp = None,
-                  DestMask = None,
-                  DstIntf = None,
-                  SrcIntf = None,
+                  IntfList = None,
+                  AclType = None,
+                  FilterName = None,
+                  Priority = None,
                   Action = None,
-                  SourceMaskv6 = None,
-                  DestMaskv6 = None,
-                  SourceIp = None,
-                  L4MaxPort = None,
-                  L4PortMatch = None):
+                  Stage = None):
         obj =  {}
-        if Priority != None :
-            obj['Priority'] = int(Priority)
-
         if AclName != None :
             obj['AclName'] = AclName
 
-        if SourceMac != None :
-            obj['SourceMac'] = SourceMac
+        if IntfList != None :
+            obj['IntfList'] = IntfList
 
-        if SourceIpv6 != None :
-            obj['SourceIpv6'] = SourceIpv6
+        if AclType != None :
+            obj['AclType'] = AclType
 
-        if L4MinPort != None :
-            obj['L4MinPort'] = int(L4MinPort)
+        if FilterName != None :
+            obj['FilterName'] = FilterName
 
-        if L4DstPort != None :
-            obj['L4DstPort'] = int(L4DstPort)
-
-        if DestIpv6 != None :
-            obj['DestIpv6'] = DestIpv6
-
-        if SourceMask != None :
-            obj['SourceMask'] = SourceMask
-
-        if DestMac != None :
-            obj['DestMac'] = DestMac
-
-        if Proto != None :
-            obj['Proto'] = Proto
-
-        if L4SrcPort != None :
-            obj['L4SrcPort'] = int(L4SrcPort)
-
-        if DestIp != None :
-            obj['DestIp'] = DestIp
-
-        if DestMask != None :
-            obj['DestMask'] = DestMask
-
-        if DstIntf != None :
-            obj['DstIntf'] = DstIntf
-
-        if SrcIntf != None :
-            obj['SrcIntf'] = SrcIntf
+        if Priority != None :
+            obj['Priority'] = int(Priority)
 
         if Action != None :
             obj['Action'] = Action
 
-        if SourceMaskv6 != None :
-            obj['SourceMaskv6'] = SourceMaskv6
-
-        if DestMaskv6 != None :
-            obj['DestMaskv6'] = DestMaskv6
-
-        if SourceIp != None :
-            obj['SourceIp'] = SourceIp
-
-        if L4MaxPort != None :
-            obj['L4MaxPort'] = int(L4MaxPort)
-
-        if L4PortMatch != None :
-            obj['L4PortMatch'] = L4PortMatch
+        if Stage != None :
+            obj['Stage'] = Stage
 
         reqUrl =  self.cfgUrlBase+'Acl'
         if self.authenticate == True:
@@ -13687,82 +14016,30 @@ class FlexSwitch( object):
 
     def updateAclById(self,
                        objectId,
-                       SourceMac = None,
-                       SourceIpv6 = None,
-                       L4MinPort = None,
-                       L4DstPort = None,
-                       DestIpv6 = None,
-                       SourceMask = None,
-                       DestMac = None,
-                       Proto = None,
-                       L4SrcPort = None,
-                       DestIp = None,
-                       DestMask = None,
-                       DstIntf = None,
-                       SrcIntf = None,
+                       IntfList = None,
+                       AclType = None,
+                       FilterName = None,
+                       Priority = None,
                        Action = None,
-                       SourceMaskv6 = None,
-                       DestMaskv6 = None,
-                       SourceIp = None,
-                       L4MaxPort = None,
-                       L4PortMatch = None):
+                       Stage = None):
         obj =  {}
-        if SourceMac !=  None:
-            obj['SourceMac'] = SourceMac
+        if IntfList !=  None:
+            obj['IntfList'] = IntfList
 
-        if SourceIpv6 !=  None:
-            obj['SourceIpv6'] = SourceIpv6
+        if AclType !=  None:
+            obj['AclType'] = AclType
 
-        if L4MinPort !=  None:
-            obj['L4MinPort'] = L4MinPort
+        if FilterName !=  None:
+            obj['FilterName'] = FilterName
 
-        if L4DstPort !=  None:
-            obj['L4DstPort'] = L4DstPort
-
-        if DestIpv6 !=  None:
-            obj['DestIpv6'] = DestIpv6
-
-        if SourceMask !=  None:
-            obj['SourceMask'] = SourceMask
-
-        if DestMac !=  None:
-            obj['DestMac'] = DestMac
-
-        if Proto !=  None:
-            obj['Proto'] = Proto
-
-        if L4SrcPort !=  None:
-            obj['L4SrcPort'] = L4SrcPort
-
-        if DestIp !=  None:
-            obj['DestIp'] = DestIp
-
-        if DestMask !=  None:
-            obj['DestMask'] = DestMask
-
-        if DstIntf !=  None:
-            obj['DstIntf'] = DstIntf
-
-        if SrcIntf !=  None:
-            obj['SrcIntf'] = SrcIntf
+        if Priority !=  None:
+            obj['Priority'] = Priority
 
         if Action !=  None:
             obj['Action'] = Action
 
-        if SourceMaskv6 !=  None:
-            obj['SourceMaskv6'] = SourceMaskv6
-
-        if DestMaskv6 !=  None:
-            obj['DestMaskv6'] = DestMaskv6
-
-        if SourceIp !=  None:
-            obj['SourceIp'] = SourceIp
-
-        if L4MaxPort !=  None:
-            obj['L4MaxPort'] = L4MaxPort
-
-        if L4PortMatch !=  None:
-            obj['L4PortMatch'] = L4PortMatch
+        if Stage !=  None:
+            obj['Stage'] = Stage
 
         reqUrl =  self.cfgUrlBase+'Acl'+"/%s"%(objectId)
         if self.authenticate == True:
@@ -13772,13 +14049,11 @@ class FlexSwitch( object):
         return r
 
     def patchUpdateAcl(self,
-                       Priority,
                        AclName,
                        op,
                        path,
                        value,):
         obj =  {}
-        obj['Priority'] = Priority
         obj['AclName'] = AclName
         obj['patch']=[{'op':op,'path':path,'value':value}]
         reqUrl =  self.cfgUrlBase+'Acl'
@@ -13789,10 +14064,8 @@ class FlexSwitch( object):
         return r
 
     def getAcl(self,
-               Priority,
                AclName):
         obj =  { 
-                'Priority' : int(Priority),
                 'AclName' : AclName,
                 }
         reqUrl =  self.cfgUrlBase + 'Acl'
