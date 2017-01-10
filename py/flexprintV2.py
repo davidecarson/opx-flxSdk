@@ -763,22 +763,42 @@ class FlexSwitchShow( object):
         self.tblPrintObject('Fan', header, rows)
 
 
-    def printDHCPRelayIntfs(self, addHeader=True, brief=None):
+    def printAclIpv4Filters(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfRef')
-            header.append('Enable')
-            header.append('ServerIp')
+            header.append('FilterName')
+            header.append('L4MinPort')
+            header.append('L4DstPort')
+            header.append('Proto')
+            header.append('DestIp')
+            header.append('L4SrcPort')
+            header.append('DestMask')
+            header.append('DstIntf')
+            header.append('SrcIntf')
+            header.append('SourceMask')
+            header.append('L4MaxPort')
+            header.append('SourceIp')
+            header.append('L4PortMatch')
 
-        objs = self.swtch.getAllDHCPRelayIntfs()
+        objs = self.swtch.getAllAclIpv4Filters()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['Enable'])
-            values.append('%s' % o['ServerIp'])
+            values.append('%s' % o['FilterName'])
+            values.append('%s' % o['L4MinPort'])
+            values.append('%s' % o['L4DstPort'])
+            values.append('%s' % o['Proto'])
+            values.append('%s' % o['DestIp'])
+            values.append('%s' % o['L4SrcPort'])
+            values.append('%s' % o['DestMask'])
+            values.append('%s' % o['DstIntf'])
+            values.append('%s' % o['SrcIntf'])
+            values.append('%s' % o['SourceMask'])
+            values.append('%s' % o['L4MaxPort'])
+            values.append('%s' % o['SourceIp'])
+            values.append('%s' % o['L4PortMatch'])
             rows.append(values)
-        self.tblPrintObject('DHCPRelayIntf', header, rows)
+        self.tblPrintObject('AclIpv4Filter', header, rows)
 
 
     def printSubIPv6Intfs(self, addHeader=True, brief=None):
@@ -805,98 +825,103 @@ class FlexSwitchShow( object):
         self.tblPrintObject('SubIPv6Intf', header, rows)
 
 
-    def printSubIPv4IntfStates(self, addHeader=True, brief=None):
+    def printIPv6RouteStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfRef')
-            header.append('Type')
-            header.append('IfIndex')
-            header.append('IfName')
-            header.append('ParentIfIndex')
-            header.append('IpAddr')
-            header.append('MacAddr')
-            header.append('OperState')
+            header.append('DestinationNw')
+            header.append('Protocol')
+            header.append('IsNetworkReachable')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
+            header.append('NextHopList')
+            header.append('PolicyList')
+            header.append('NextBestRoute')
 
-        objs = self.swtch.getAllSubIPv4IntfStates()
+        objs = self.swtch.getAllIPv6RouteStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['Type'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['IfName'])
-            values.append('%s' % o['ParentIfIndex'])
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['OperState'])
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['Protocol'])
+            values.append('%s' % o['IsNetworkReachable'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
+            values.append('%s' % o['NextHopList'])
+            values.append('%s' % o['PolicyList'])
+            values.append('%s' % o['NextBestRoute'])
             rows.append(values)
-        self.tblPrintObject('SubIPv4IntfState', header, rows)
+        self.tblPrintObject('IPv6RouteState', header, rows)
 
 
-    def printSubIPv4IntfState(self, IntfRef,Type, addHeader=True, brief=None):
+    def printIPv6RouteState(self, DestinationNw, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfRef')
-            header.append('Type')
-            header.append('IfIndex')
-            header.append('IfName')
-            header.append('ParentIfIndex')
-            header.append('IpAddr')
-            header.append('MacAddr')
-            header.append('OperState')
+            header.append('DestinationNw')
+            header.append('Protocol')
+            header.append('IsNetworkReachable')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
+            header.append('NextHopList')
+            header.append('PolicyList')
+            header.append('NextBestRoute')
 
-        rawobj = self.swtch.getSubIPv4IntfState(
-                                                IntfRef,
-                                                Type)
+        rawobj = self.swtch.getIPv6RouteState(
+                                              DestinationNw)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['Type'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['IfName'])
-            values.append('%s' % o['ParentIfIndex'])
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['OperState'])
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['Protocol'])
+            values.append('%s' % o['IsNetworkReachable'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
+            values.append('%s' % o['NextHopList'])
+            values.append('%s' % o['PolicyList'])
+            values.append('%s' % o['NextBestRoute'])
             rows.append(values)
-            self.tblPrintObject('SubIPv4IntfState', header, rows)
+            self.tblPrintObject('IPv6RouteState', header, rows)
 
         else:
             print rawobj.content
 
-    def printCombinedSubIPv4IntfStates(self, addHeader=True, brief=None):
+    def printCombinedIPv6RouteStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('IntfRef')
-            header.append('Type')
-            header.append('IfIndex')
-            header.append('IfName')
-            header.append('ParentIfIndex')
-            header.append('IpAddr')
-            header.append('MacAddr')
-            header.append('OperState')
-            header.append('Enable')
+            header.append('DestinationNw')
+            header.append('Protocol')
+            header.append('IsNetworkReachable')
+            header.append('RouteCreatedTime')
+            header.append('RouteUpdatedTime')
+            header.append('NextHopList')
+            header.append('PolicyList')
+            header.append('NextBestRoute')
+            header.append('NetworkMask')
+            header.append('NextHop')
+            header.append('NullRoute')
+            header.append('Cost')
 
-        objs = self.swtch.getAllSubIPv4IntfStates()
+        objs = self.swtch.getAllIPv6RouteStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['IntfRef'])
-            values.append('%s' % o['Type'])
-            values.append('%s' % o['IfIndex'])
-            values.append('%s' % o['IfName'])
-            values.append('%s' % o['ParentIfIndex'])
-            values.append('%s' % o['IpAddr'])
-            values.append('%s' % o['MacAddr'])
-            values.append('%s' % o['OperState'])
-            r = self.swtch.getSubIPv4Intf(o['Type'], o['IntfRef'])
+            values.append('%s' % o['DestinationNw'])
+            values.append('%s' % o['Protocol'])
+            values.append('%s' % o['IsNetworkReachable'])
+            values.append('%s' % o['RouteCreatedTime'])
+            values.append('%s' % o['RouteUpdatedTime'])
+            values.append('%s' % o['NextHopList'])
+            values.append('%s' % o['PolicyList'])
+            values.append('%s' % o['NextBestRoute'])
+            r = self.swtch.getIPv6Route(o['DestinationNw'], o['NetworkMask'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
-                values.append('%s' % o['Enable'])
+                values.append('%s' % o['NetworkMask'])
+                values.append('%s' % o['NextHop'])
+                values.append('%s' % o['NullRoute'])
+                values.append('%s' % o['Cost'])
             rows.append(values)
-        self.tblPrintObject('SubIPv4IntfState', header, rows)
+        self.tblPrintObject('IPv6RouteState', header, rows)
 
 
     def printPolicyPrefixSetStates(self, addHeader=True, brief=None):
@@ -3243,6 +3268,28 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BfdSessionParamState', header, rows)
 
 
+    def printAclMacFilters(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('FilterName')
+            header.append('DestMac')
+            header.append('SourceMask')
+            header.append('DestMask')
+            header.append('SourceMac')
+
+        objs = self.swtch.getAllAclMacFilters()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['FilterName'])
+            values.append('%s' % o['DestMac'])
+            values.append('%s' % o['SourceMask'])
+            values.append('%s' % o['DestMask'])
+            values.append('%s' % o['SourceMac'])
+            rows.append(values)
+        self.tblPrintObject('AclMacFilter', header, rows)
+
+
     def printAsicGlobalStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -3774,6 +3821,7 @@ class FlexSwitchShow( object):
         header = []; rows = []
         if addHeader:
             header.append('AclName')
+            header.append('Priority')
             header.append('AclType')
             header.append('IntfList')
             header.append('HwPresence')
@@ -3784,6 +3832,7 @@ class FlexSwitchShow( object):
             o = obj['Object']
             values = []
             values.append('%s' % o['AclName'])
+            values.append('%s' % o['Priority'])
             values.append('%s' % o['AclType'])
             values.append('%s' % o['IntfList'])
             values.append('%s' % o['HwPresence'])
@@ -3796,6 +3845,7 @@ class FlexSwitchShow( object):
         header = []; rows = []
         if addHeader:
             header.append('AclName')
+            header.append('Priority')
             header.append('AclType')
             header.append('IntfList')
             header.append('HwPresence')
@@ -3808,6 +3858,7 @@ class FlexSwitchShow( object):
             o = obj['Object']
             values = []
             values.append('%s' % o['AclName'])
+            values.append('%s' % o['Priority'])
             values.append('%s' % o['AclType'])
             values.append('%s' % o['IntfList'])
             values.append('%s' % o['HwPresence'])
@@ -3822,63 +3873,31 @@ class FlexSwitchShow( object):
         header = []; rows = []
         if addHeader:
             header.append('AclName')
+            header.append('Priority')
             header.append('AclType')
             header.append('IntfList')
             header.append('HwPresence')
             header.append('HitCount')
-            header.append('Priority')
-            header.append('SourceMac')
-            header.append('SourceIpv6')
-            header.append('L4MinPort')
-            header.append('L4DstPort')
-            header.append('DestIpv6')
-            header.append('SourceMask')
-            header.append('DestMac')
-            header.append('Proto')
-            header.append('L4SrcPort')
-            header.append('DestIp')
-            header.append('DestMask')
-            header.append('DstIntf')
-            header.append('SrcIntf')
+            header.append('FilterName')
             header.append('Action')
-            header.append('SourceMaskv6')
-            header.append('DestMaskv6')
-            header.append('SourceIp')
-            header.append('L4MaxPort')
-            header.append('L4PortMatch')
+            header.append('Stage')
 
         objs = self.swtch.getAllAclStates()
         for obj in objs:
             o = obj['Object']
             values = []
             values.append('%s' % o['AclName'])
+            values.append('%s' % o['Priority'])
             values.append('%s' % o['AclType'])
             values.append('%s' % o['IntfList'])
             values.append('%s' % o['HwPresence'])
             values.append('%s' % o['HitCount'])
-            r = self.swtch.getAcl(o['Priority'], o['AclName'])
+            r = self.swtch.getAcl(o['AclName'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
-                values.append('%s' % o['Priority'])
-                values.append('%s' % o['SourceMac'])
-                values.append('%s' % o['SourceIpv6'])
-                values.append('%s' % o['L4MinPort'])
-                values.append('%s' % o['L4DstPort'])
-                values.append('%s' % o['DestIpv6'])
-                values.append('%s' % o['SourceMask'])
-                values.append('%s' % o['DestMac'])
-                values.append('%s' % o['Proto'])
-                values.append('%s' % o['L4SrcPort'])
-                values.append('%s' % o['DestIp'])
-                values.append('%s' % o['DestMask'])
-                values.append('%s' % o['DstIntf'])
-                values.append('%s' % o['SrcIntf'])
+                values.append('%s' % o['FilterName'])
                 values.append('%s' % o['Action'])
-                values.append('%s' % o['SourceMaskv6'])
-                values.append('%s' % o['DestMaskv6'])
-                values.append('%s' % o['SourceIp'])
-                values.append('%s' % o['L4MaxPort'])
-                values.append('%s' % o['L4PortMatch'])
+                values.append('%s' % o['Stage'])
             rows.append(values)
         self.tblPrintObject('AclState', header, rows)
 
@@ -3972,6 +3991,22 @@ class FlexSwitchShow( object):
                 o = r.json()['Object']
             rows.append(values)
         self.tblPrintObject('PolicyASPathSetState', header, rows)
+
+
+    def printBfdGlobals(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('Vrf')
+            header.append('Enable')
+
+        objs = self.swtch.getAllBfdGlobals()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['Vrf'])
+            values.append('%s' % o['Enable'])
+            rows.append(values)
+        self.tblPrintObject('BfdGlobal', header, rows)
 
 
     def printDWDMModuleClntIntfStates(self, addHeader=True, brief=None):
@@ -4636,20 +4671,42 @@ class FlexSwitchShow( object):
         self.tblPrintObject('VrrpV4Intf', header, rows)
 
 
-    def printBfdGlobals(self, addHeader=True, brief=None):
+    def printAclIpv6Filters(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Vrf')
-            header.append('Enable')
+            header.append('FilterName')
+            header.append('SourceIpv6')
+            header.append('L4MinPort')
+            header.append('L4DstPort')
+            header.append('DestIpv6')
+            header.append('Proto')
+            header.append('L4SrcPort')
+            header.append('DstIntf')
+            header.append('SrcIntf')
+            header.append('SourceMaskv6')
+            header.append('DestMaskv6')
+            header.append('L4MaxPort')
+            header.append('L4PortMatch')
 
-        objs = self.swtch.getAllBfdGlobals()
+        objs = self.swtch.getAllAclIpv6Filters()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Vrf'])
-            values.append('%s' % o['Enable'])
+            values.append('%s' % o['FilterName'])
+            values.append('%s' % o['SourceIpv6'])
+            values.append('%s' % o['L4MinPort'])
+            values.append('%s' % o['L4DstPort'])
+            values.append('%s' % o['DestIpv6'])
+            values.append('%s' % o['Proto'])
+            values.append('%s' % o['L4SrcPort'])
+            values.append('%s' % o['DstIntf'])
+            values.append('%s' % o['SrcIntf'])
+            values.append('%s' % o['SourceMaskv6'])
+            values.append('%s' % o['DestMaskv6'])
+            values.append('%s' % o['L4MaxPort'])
+            values.append('%s' % o['L4PortMatch'])
             rows.append(values)
-        self.tblPrintObject('BfdGlobal', header, rows)
+        self.tblPrintObject('AclIpv6Filter', header, rows)
 
 
     def printVoltageSensors(self, addHeader=True, brief=None):
@@ -5758,6 +5815,7 @@ class FlexSwitchShow( object):
             header.append('EBGPMaxPaths')
             header.append('EBGPAllowMultipleAS')
             header.append('IBGPMaxPaths')
+            header.append('DefaultMED')
             header.append('Defaultv4Route')
             header.append('Defaultv6Route')
             header.append('TotalPaths')
@@ -5776,6 +5834,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['EBGPMaxPaths'])
             values.append('%s' % o['EBGPAllowMultipleAS'])
             values.append('%s' % o['IBGPMaxPaths'])
+            values.append('%s' % o['DefaultMED'])
             values.append('%s' % o['Defaultv4Route'])
             values.append('%s' % o['Defaultv6Route'])
             values.append('%s' % o['TotalPaths'])
@@ -5796,6 +5855,7 @@ class FlexSwitchShow( object):
             header.append('EBGPMaxPaths')
             header.append('EBGPAllowMultipleAS')
             header.append('IBGPMaxPaths')
+            header.append('DefaultMED')
             header.append('Defaultv4Route')
             header.append('Defaultv6Route')
             header.append('TotalPaths')
@@ -5816,6 +5876,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['EBGPMaxPaths'])
             values.append('%s' % o['EBGPAllowMultipleAS'])
             values.append('%s' % o['IBGPMaxPaths'])
+            values.append('%s' % o['DefaultMED'])
             values.append('%s' % o['Defaultv4Route'])
             values.append('%s' % o['Defaultv6Route'])
             values.append('%s' % o['TotalPaths'])
@@ -5838,6 +5899,7 @@ class FlexSwitchShow( object):
             header.append('EBGPMaxPaths')
             header.append('EBGPAllowMultipleAS')
             header.append('IBGPMaxPaths')
+            header.append('DefaultMED')
             header.append('Defaultv4Route')
             header.append('Defaultv6Route')
             header.append('TotalPaths')
@@ -5858,6 +5920,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['EBGPMaxPaths'])
             values.append('%s' % o['EBGPAllowMultipleAS'])
             values.append('%s' % o['IBGPMaxPaths'])
+            values.append('%s' % o['DefaultMED'])
             values.append('%s' % o['Defaultv4Route'])
             values.append('%s' % o['Defaultv6Route'])
             values.append('%s' % o['TotalPaths'])
@@ -6943,79 +7006,6 @@ class FlexSwitchShow( object):
         self.tblPrintObject('DHCPRelayIntfState', header, rows)
 
 
-    def printAclGroupStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('GroupName')
-            header.append('AclType')
-            header.append('AclNameList')
-            header.append('IntfList')
-            header.append('Direction')
-
-        objs = self.swtch.getAllAclGroupStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['GroupName'])
-            values.append('%s' % o['AclType'])
-            values.append('%s' % o['AclNameList'])
-            values.append('%s' % o['IntfList'])
-            values.append('%s' % o['Direction'])
-            rows.append(values)
-        self.tblPrintObject('AclGroupState', header, rows)
-
-
-    def printAclGroupState(self, GroupName, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('GroupName')
-            header.append('AclType')
-            header.append('AclNameList')
-            header.append('IntfList')
-            header.append('Direction')
-
-        rawobj = self.swtch.getAclGroupState(
-                                             GroupName)
-        if rawobj.status_code in self.httpSuccessCodes:
-            obj = rawobj.json()
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['GroupName'])
-            values.append('%s' % o['AclType'])
-            values.append('%s' % o['AclNameList'])
-            values.append('%s' % o['IntfList'])
-            values.append('%s' % o['Direction'])
-            rows.append(values)
-            self.tblPrintObject('AclGroupState', header, rows)
-
-        else:
-            print rawobj.content
-
-    def printCombinedAclGroupStates(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('GroupName')
-            header.append('AclType')
-            header.append('AclNameList')
-            header.append('IntfList')
-            header.append('Direction')
-
-        objs = self.swtch.getAllAclGroupStates()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['GroupName'])
-            values.append('%s' % o['AclType'])
-            values.append('%s' % o['AclNameList'])
-            values.append('%s' % o['IntfList'])
-            values.append('%s' % o['Direction'])
-            r = self.swtch.getAclGroup(o['GroupName'])
-            if r.status_code in self.httpSuccessCodes:
-                o = r.json()['Object']
-            rows.append(values)
-        self.tblPrintObject('AclGroupState', header, rows)
-
-
     def printVoltageSensorPMDataStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -7534,6 +7524,24 @@ class FlexSwitchShow( object):
         else:
             print rawobj.content
 
+    def printDHCPRelayIntfs(self, addHeader=True, brief=None):
+        header = []; rows = []
+        if addHeader:
+            header.append('IntfRef')
+            header.append('Enable')
+            header.append('ServerIp')
+
+        objs = self.swtch.getAllDHCPRelayIntfs()
+        for obj in objs:
+            o = obj['Object']
+            values = []
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Enable'])
+            values.append('%s' % o['ServerIp'])
+            rows.append(values)
+        self.tblPrintObject('DHCPRelayIntf', header, rows)
+
+
     def printDWDMModuleNwIntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -7811,7 +7819,7 @@ class FlexSwitchShow( object):
         header = []; rows = []
         if addHeader:
             header.append('Vrf')
-            header.append('RouterId')
+            header.append('DefaultMED')
             header.append('Defaultv4Route')
             header.append('UseMultiplePaths')
             header.append('Defaultv6Route')
@@ -7819,6 +7827,7 @@ class FlexSwitchShow( object):
             header.append('EBGPMaxPaths')
             header.append('EBGPAllowMultipleAS')
             header.append('Disabled')
+            header.append('RouterId')
             header.append('IBGPMaxPaths')
             header.append('Redistribution')
 
@@ -7827,7 +7836,7 @@ class FlexSwitchShow( object):
             o = obj['Object']
             values = []
             values.append('%s' % o['Vrf'])
-            values.append('%s' % o['RouterId'])
+            values.append('%s' % o['DefaultMED'])
             values.append('%s' % o['Defaultv4Route'])
             values.append('%s' % o['UseMultiplePaths'])
             values.append('%s' % o['Defaultv6Route'])
@@ -7835,6 +7844,7 @@ class FlexSwitchShow( object):
             values.append('%s' % o['EBGPMaxPaths'])
             values.append('%s' % o['EBGPAllowMultipleAS'])
             values.append('%s' % o['Disabled'])
+            values.append('%s' % o['RouterId'])
             values.append('%s' % o['IBGPMaxPaths'])
             values.append('%s' % o['Redistribution'])
             rows.append(values)
@@ -7844,14 +7854,14 @@ class FlexSwitchShow( object):
     def printAclGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Unit')
+            header.append('AclGlobal')
             header.append('GlobalDropEnable')
 
         objs = self.swtch.getAllAclGlobals()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Unit'])
+            values.append('%s' % o['AclGlobal'])
             values.append('%s' % o['GlobalDropEnable'])
             rows.append(values)
         self.tblPrintObject('AclGlobal', header, rows)
@@ -8144,24 +8154,6 @@ class FlexSwitchShow( object):
         self.tblPrintObject('LLDPGlobalState', header, rows)
 
 
-    def printAclGroups(self, addHeader=True, brief=None):
-        header = []; rows = []
-        if addHeader:
-            header.append('GroupName')
-            header.append('IntfList')
-            header.append('Direction')
-
-        objs = self.swtch.getAllAclGroups()
-        for obj in objs:
-            o = obj['Object']
-            values = []
-            values.append('%s' % o['GroupName'])
-            values.append('%s' % o['IntfList'])
-            values.append('%s' % o['Direction'])
-            rows.append(values)
-        self.tblPrintObject('AclGroup', header, rows)
-
-
     def printNDPGlobals(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
@@ -8325,103 +8317,98 @@ class FlexSwitchShow( object):
         self.tblPrintObject('BfdSession', header, rows)
 
 
-    def printIPv6RouteStates(self, addHeader=True, brief=None):
+    def printSubIPv4IntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DestinationNw')
-            header.append('Protocol')
-            header.append('IsNetworkReachable')
-            header.append('RouteCreatedTime')
-            header.append('RouteUpdatedTime')
-            header.append('NextHopList')
-            header.append('PolicyList')
-            header.append('NextBestRoute')
+            header.append('IntfRef')
+            header.append('Type')
+            header.append('IfIndex')
+            header.append('IfName')
+            header.append('ParentIfIndex')
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('OperState')
 
-        objs = self.swtch.getAllIPv6RouteStates()
+        objs = self.swtch.getAllSubIPv4IntfStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['DestinationNw'])
-            values.append('%s' % o['Protocol'])
-            values.append('%s' % o['IsNetworkReachable'])
-            values.append('%s' % o['RouteCreatedTime'])
-            values.append('%s' % o['RouteUpdatedTime'])
-            values.append('%s' % o['NextHopList'])
-            values.append('%s' % o['PolicyList'])
-            values.append('%s' % o['NextBestRoute'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Type'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['IfName'])
+            values.append('%s' % o['ParentIfIndex'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['OperState'])
             rows.append(values)
-        self.tblPrintObject('IPv6RouteState', header, rows)
+        self.tblPrintObject('SubIPv4IntfState', header, rows)
 
 
-    def printIPv6RouteState(self, DestinationNw, addHeader=True, brief=None):
+    def printSubIPv4IntfState(self, IntfRef,Type, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DestinationNw')
-            header.append('Protocol')
-            header.append('IsNetworkReachable')
-            header.append('RouteCreatedTime')
-            header.append('RouteUpdatedTime')
-            header.append('NextHopList')
-            header.append('PolicyList')
-            header.append('NextBestRoute')
+            header.append('IntfRef')
+            header.append('Type')
+            header.append('IfIndex')
+            header.append('IfName')
+            header.append('ParentIfIndex')
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('OperState')
 
-        rawobj = self.swtch.getIPv6RouteState(
-                                              DestinationNw)
+        rawobj = self.swtch.getSubIPv4IntfState(
+                                                IntfRef,
+                                                Type)
         if rawobj.status_code in self.httpSuccessCodes:
             obj = rawobj.json()
             o = obj['Object']
             values = []
-            values.append('%s' % o['DestinationNw'])
-            values.append('%s' % o['Protocol'])
-            values.append('%s' % o['IsNetworkReachable'])
-            values.append('%s' % o['RouteCreatedTime'])
-            values.append('%s' % o['RouteUpdatedTime'])
-            values.append('%s' % o['NextHopList'])
-            values.append('%s' % o['PolicyList'])
-            values.append('%s' % o['NextBestRoute'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Type'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['IfName'])
+            values.append('%s' % o['ParentIfIndex'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['OperState'])
             rows.append(values)
-            self.tblPrintObject('IPv6RouteState', header, rows)
+            self.tblPrintObject('SubIPv4IntfState', header, rows)
 
         else:
             print rawobj.content
 
-    def printCombinedIPv6RouteStates(self, addHeader=True, brief=None):
+    def printCombinedSubIPv4IntfStates(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('DestinationNw')
-            header.append('Protocol')
-            header.append('IsNetworkReachable')
-            header.append('RouteCreatedTime')
-            header.append('RouteUpdatedTime')
-            header.append('NextHopList')
-            header.append('PolicyList')
-            header.append('NextBestRoute')
-            header.append('NetworkMask')
-            header.append('NextHop')
-            header.append('NullRoute')
-            header.append('Cost')
+            header.append('IntfRef')
+            header.append('Type')
+            header.append('IfIndex')
+            header.append('IfName')
+            header.append('ParentIfIndex')
+            header.append('IpAddr')
+            header.append('MacAddr')
+            header.append('OperState')
+            header.append('Enable')
 
-        objs = self.swtch.getAllIPv6RouteStates()
+        objs = self.swtch.getAllSubIPv4IntfStates()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['DestinationNw'])
-            values.append('%s' % o['Protocol'])
-            values.append('%s' % o['IsNetworkReachable'])
-            values.append('%s' % o['RouteCreatedTime'])
-            values.append('%s' % o['RouteUpdatedTime'])
-            values.append('%s' % o['NextHopList'])
-            values.append('%s' % o['PolicyList'])
-            values.append('%s' % o['NextBestRoute'])
-            r = self.swtch.getIPv6Route(o['DestinationNw'], o['NetworkMask'])
+            values.append('%s' % o['IntfRef'])
+            values.append('%s' % o['Type'])
+            values.append('%s' % o['IfIndex'])
+            values.append('%s' % o['IfName'])
+            values.append('%s' % o['ParentIfIndex'])
+            values.append('%s' % o['IpAddr'])
+            values.append('%s' % o['MacAddr'])
+            values.append('%s' % o['OperState'])
+            r = self.swtch.getSubIPv4Intf(o['Type'], o['IntfRef'])
             if r.status_code in self.httpSuccessCodes:
                 o = r.json()['Object']
-                values.append('%s' % o['NetworkMask'])
-                values.append('%s' % o['NextHop'])
-                values.append('%s' % o['NullRoute'])
-                values.append('%s' % o['Cost'])
+                values.append('%s' % o['Enable'])
             rows.append(values)
-        self.tblPrintObject('IPv6RouteState', header, rows)
+        self.tblPrintObject('SubIPv4IntfState', header, rows)
 
 
     def printPolicyConditionStates(self, addHeader=True, brief=None):
@@ -11149,53 +11136,25 @@ class FlexSwitchShow( object):
     def printAcls(self, addHeader=True, brief=None):
         header = []; rows = []
         if addHeader:
-            header.append('Priority')
             header.append('AclName')
-            header.append('SourceMac')
-            header.append('SourceIpv6')
-            header.append('L4MinPort')
-            header.append('L4DstPort')
-            header.append('DestIpv6')
-            header.append('SourceMask')
-            header.append('DestMac')
-            header.append('Proto')
-            header.append('L4SrcPort')
-            header.append('DestIp')
-            header.append('DestMask')
-            header.append('DstIntf')
-            header.append('SrcIntf')
+            header.append('IntfList')
+            header.append('AclType')
+            header.append('FilterName')
+            header.append('Priority')
             header.append('Action')
-            header.append('SourceMaskv6')
-            header.append('DestMaskv6')
-            header.append('SourceIp')
-            header.append('L4MaxPort')
-            header.append('L4PortMatch')
+            header.append('Stage')
 
         objs = self.swtch.getAllAcls()
         for obj in objs:
             o = obj['Object']
             values = []
-            values.append('%s' % o['Priority'])
             values.append('%s' % o['AclName'])
-            values.append('%s' % o['SourceMac'])
-            values.append('%s' % o['SourceIpv6'])
-            values.append('%s' % o['L4MinPort'])
-            values.append('%s' % o['L4DstPort'])
-            values.append('%s' % o['DestIpv6'])
-            values.append('%s' % o['SourceMask'])
-            values.append('%s' % o['DestMac'])
-            values.append('%s' % o['Proto'])
-            values.append('%s' % o['L4SrcPort'])
-            values.append('%s' % o['DestIp'])
-            values.append('%s' % o['DestMask'])
-            values.append('%s' % o['DstIntf'])
-            values.append('%s' % o['SrcIntf'])
+            values.append('%s' % o['IntfList'])
+            values.append('%s' % o['AclType'])
+            values.append('%s' % o['FilterName'])
+            values.append('%s' % o['Priority'])
             values.append('%s' % o['Action'])
-            values.append('%s' % o['SourceMaskv6'])
-            values.append('%s' % o['DestMaskv6'])
-            values.append('%s' % o['SourceIp'])
-            values.append('%s' % o['L4MaxPort'])
-            values.append('%s' % o['L4PortMatch'])
+            values.append('%s' % o['Stage'])
             rows.append(values)
         self.tblPrintObject('Acl', header, rows)
 
